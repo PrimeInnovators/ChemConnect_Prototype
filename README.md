@@ -100,7 +100,7 @@ A comprehensive section answering common queries regarding platform use, rules, 
 13. Contact Us Form - 
 A simple and accessible way for users to get in touch with the ChemConnect team for queries, support, feedback, or collaboration opportunities.
 
-# How to use the prototype webiste (ChemConnect)
+# How to use the prototype website (ChemConnect)
 This basically defines the usage flow and how to use the prototype website which would be deployed soon 
 
 ChemConnect Usage Flow
