@@ -36,6 +36,14 @@ We have implemented local storage check as well as demo users for our convenienc
 
 **Commit TimeStamp** 12:40 a.m. **Progress** - We added the setup description and explanation of our prototype ChemConnect website and updated the README.md file
 
+**PROJECT DEPLOYMENT**
+**Crucial Commit TimeStamp** 12:47 a.m. 
+
+Deployed: ChemConnect (Prototype)
+🌐 URL: https://chemconnectprototype.netlify.app/
+Status: Successfully deployed on Netlify
+
+
 
 # FEATURES 
 🌐 ChemConnect (Prototype) – Website Features Overview 
