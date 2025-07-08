@@ -30,6 +30,13 @@ We have implemented local storage check as well as demo users for our convenienc
 
 **Commit TimeStamp** 12:16 a.m. **Progress** - We are finishing the work in README.md file by adding setup,features and how to run the project explanation as well as description below the Time Stamp and Progress Record 
 
+**Commit TimeStamp** 12:18 a.m. **Progress** - We added the features description and explanation of our prototype ChemConnect and updated the README.md file
+
+**Commit TimeStamp** 12:24 a.m. **Progress** - We added the how to use the website description and explanation of our prototype ChemConnect website and updated the README.md file
+
+**Commit TimeStamp** 12:40 a.m. **Progress** - We added the setup description and explanation of our prototype ChemConnect website and updated the README.md file
+
+
 # FEATURES 
 🌐 ChemConnect (Prototype) – Website Features Overview 
 Below are listed almost all the main features of the prototype ChemConnect Website 
@@ -84,3 +91,89 @@ A comprehensive section answering common queries regarding platform use, rules, 
 
 13. Contact Us Form - 
 A simple and accessible way for users to get in touch with the ChemConnect team for queries, support, feedback, or collaboration opportunities.
+
+# How to use the prototype webiste (ChemConnect)
+This basically defines the usage flow and how to use the prototype website which would be deployed soon 
+
+ChemConnect Usage Flow
+
+1. Visit Website
+→ Register / Login as Institution / Lab
+→ Choose: Request Resource or Supply Resource
+
+
+2.To Supply or Share a Resource:
+
+→ Go to Supply Form
+→ Enter resource details (chemical, equipment, quantity, etc.)
+→ Submit form
+→ Resource appears in Available Resource List
+→ Other users can now search, view, and request it
+
+
+3.To Request a Resource:
+
+→ Use Search Bar to find the needed item
+→ If available
+ → View Supplier Contact Details
+ → Contact supplier and coordinate sharing
+→ If not available
+ → Go to Request Form
+ → Submit request for the item
+ → Other institutions will be notified
+
+  After Exchange:
+→ View all activity in User History
+
+# Setup 
+
+The prototype website basically contains of five static webpages login,register,index,homepage,supplier_contact.html with local storage implementation
+For Form Handling and other functionality - JS has been used
+For feature making and form making - HTML has been used
+Layout  and styling of pages through HTML and HTML
+So basically HTML,CSS AND JS has been used for the entire prototype website development
+Deployment has been done through netlify 
+
+🌐 ChemConnect Website – Page Flow (Simplified)
+1. index.html – Landing Page
+First page user sees
+
+Has buttons/links:
+ Register → goes to register.html
+ Login → goes to login.html
+
+2. register.html – User Registration
+User fills in name, email, and password
+
+Data is saved using localStorage
+
+After registering, user goes to login.html
+
+3. login.html – User Login
+User enters email and password
+
+Data is checked with localStorage
+
+If correct → goes to homepage.html
+
+4. homepage.html – User Dashboard
+Shown only after login
+
+User can:
+
+View platform features
+
+Go to Supplier Contact
+
+5. supplier_contact.html – Supplier Page
+Users can contact chemical suppliers
+
+Usually has a form to fill
+
+Page Flow Summary
+Option 1 (new user):
+index.html → register.html → login.html → homepage.html → supplier_contact.html
+
+Option 2 (returning user):
+index.html → login.html → homepage.html → supplier_contact.html
+
