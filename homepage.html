@@ -996,7 +996,6 @@
                 
                 <div>
                     <h3 class="text-lg font-bold mb-4">Quick Links</h3>
-                     <!-- Quick Links which reference to different sections on homepage -->
                     <ul class="space-y-2">
                         <li><a href="#home" class="text-gray-400 hover:text-white transition-all">Home</a></li>
                         <li><a href="#about" class="text-gray-400 hover:text-white transition-all">About</a></li>
@@ -1041,7 +1040,7 @@
             </div>
         </div>
     </footer>
-  
+
     <!-- JavaScript -->
     <script>
         // Mobile menu toggle
@@ -1075,7 +1074,7 @@
 
         // Request form submission handling
         document.getElementById('requestForm').addEventListener('submit', function(e) {
-            e.preventDefault(); 
+            e.preventDefault();
             
             if (!currentUser) {
                 alert('Please log in to submit a request.');
@@ -1084,7 +1083,6 @@
 
             const requestData = {
                 id: Date.now(), // Unique ID for the request
-              //these data are stored locally
                 userId: currentUser.id,
                 collegeName: document.getElementById('collegeName').value,
                 contactPerson: document.getElementById('contactPerson').value,
@@ -1096,15 +1094,15 @@
                 timestamp: new Date().toISOString()
             };
 
-            let userRequests = JSON.parse(localStorage.getItem(chemconnect_requests_${currentUser.id}) || '[]');
+            let userRequests = JSON.parse(localStorage.getItem(`chemconnect_requests_${currentUser.id}`) || '[]');
             userRequests.push(requestData);
-            localStorage.setItem(chemconnect_requests_${currentUser.id}, JSON.stringify(userRequests));
+            localStorage.setItem(`chemconnect_requests_${currentUser.id}`, JSON.stringify(userRequests));
 
             // Show success message
             document.getElementById('requestSuccess').classList.remove('hidden');
             setTimeout(() => {
                 document.getElementById('requestSuccess').classList.add('hidden');
-            }, 5000);// when user submits the form he gets result that he will be contacted in few days 
+            }, 5000);
             
             // Reset form
             this.reset();
@@ -1121,7 +1119,7 @@
             }
 
             const supplyData = {
-                id: Date.now(), // Unique ID for the supply item  // these data are stored locally
+                id: Date.now(), // Unique ID for the supply item
                 userId: currentUser.id,
                 collegeName: document.getElementById('supplyCollegeName').value,
                 contactPerson: document.getElementById('supplyContactPerson').value,
@@ -1134,7 +1132,7 @@
                 timestamp: new Date().toISOString()
             };
 
-            // Store supplier contact info  // this info about contact supplier is visible below the available items in the search section
+            // Store supplier contact info
             let storedSuppliers = JSON.parse(localStorage.getItem('chemconnect_suppliers') || '{}');
             storedSuppliers[supplyData.collegeName] = {
                 name: supplyData.collegeName,
@@ -1145,9 +1143,9 @@
             };
             localStorage.setItem('chemconnect_suppliers', JSON.stringify(storedSuppliers));
 
-            let userSupplies = JSON.parse(localStorage.getItem(chemconnect_supplies_${currentUser.id}) || '[]');
+            let userSupplies = JSON.parse(localStorage.getItem(`chemconnect_supplies_${currentUser.id}`) || '[]');
             userSupplies.push(supplyData);
-            localStorage.setItem(chemconnect_supplies_${currentUser.id}, JSON.stringify(userSupplies));
+            localStorage.setItem(`chemconnect_supplies_${currentUser.id}`, JSON.stringify(userSupplies));
 
             // Also add to the general search results (dynamicItemsContainer)
             // This part is already handled by the existing code, just ensure it uses the new supplyData
@@ -1171,9 +1169,9 @@
                     <span class="px-3 py-1 bg-green-100 text-green-700 text-sm rounded-full">Available</span>
                 </div>
                 <a href="supplier_contact.html?supplier=${encodeURIComponent(supplyData.collegeName)}&item=${encodeURIComponent(supplyData.itemDetails)}" class="mt-4 text-blue-600 hover:text-blue-800 font-medium">Contact Supplier</a>
-            `; // this provide basic info about supplier
+            `;
 
-            // Add to the dynamic items container // Using prepend to ensure the latest item appears in the list
+            // Add to the dynamic items container
             document.getElementById('dynamicItemsContainer').prepend(newItem);
             
             // Show success message
@@ -1203,10 +1201,9 @@
         const searchButton = document.getElementById('searchButton');
         const searchResultsContainer = document.getElementById('searchResults'); // This is the parent of all item divs
         const filterButtons = document.querySelectorAll('.search-filter');
-        const loadMoreButton = document.getElementById('loadMoreButton');  // this is a mock link
+        const loadMoreButton = document.getElementById('loadMoreButton');
 
         // Function to perform search and filter
-      // Helps user to search available items according to his needs
         function performSearch() {
             const query = searchInput.value.toLowerCase().trim();
             let selectedType = null;
@@ -1229,7 +1226,7 @@
                 }
                 return [child];
             }).filter(item => item.nodeType === 1); // Ensure it's an element node
-           // show results on the basis of the input by user 
+
             allItems.forEach(item => {
                 const itemText = item.textContent.toLowerCase();
                 const itemType = item.getAttribute('data-item-type');
@@ -1262,7 +1259,7 @@
                 let isActive = false;
 
                 // Check if this button is already active
-                if (this.classList.contains(active-${type})) {
+                if (this.classList.contains(`active-${type}`)) {
                     isActive = true;
                 }
 
@@ -1270,7 +1267,6 @@
                 filterButtons.forEach(btn => {
                     btn.classList.remove('active-chemical', 'active-equipment', 'active-glassware', 'active-other');
                     // Reset to default Tailwind colors
-                  // This ensures all buttons return to a neutral (unselected) appearance before applying any new selection
                     const btnType = btn.getAttribute('data-type');
                     if (btnType === 'chemical') btn.classList.replace('bg-blue-600', 'bg-blue-100');
                     else if (btnType === 'equipment') btn.classList.replace('bg-green-600', 'bg-green-100');
@@ -1283,9 +1279,9 @@
                     else if (btnType === 'other') btn.classList.add('text-yellow-700');
                 });
 
-                // If the button was not active, it commands to active the button
+                // If the button was not active, make it active
                 if (!isActive) {
-                    this.classList.add(active-${type});
+                    this.classList.add(`active-${type}`);
                     // Apply specific active color
                     if (type === 'chemical') this.classList.replace('bg-blue-100', 'bg-blue-600');
                     else if (type === 'equipment') this.classList.replace('bg-green-100', 'bg-green-600');
@@ -1331,14 +1327,14 @@
         // Initial search to ensure all items are visible by default
         performSearch();
 
-    </script>  
+    </script>   
 <!-- Chatbot implemented as a floating button and window -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ChemConnect Assistant</title> // it is a Ai bot which is maked by pre defined QnAs
+    <title>ChemConnect Assistant</title>
     <style>
         * {
             margin: 0;
@@ -1391,7 +1387,6 @@
         }
 
         /* Chat Window */
-      /* show all the types of question already set in the bot */
         .chat-window {
             position: absolute;
             bottom: 85px;
@@ -1642,7 +1637,7 @@
             transform: translateY(0);
         }
 
-        /* Welcome Message is a pre defined which is shown everytime when user open the chat bot */
+        /* Welcome Message */
         .welcome-message {
             text-align: center;
             padding: 20px;
@@ -1677,8 +1672,7 @@
             background: #a8a8a8;
         }
 
-        /* Responsive */ 
-      /*  This bot is not integrated with AI – it only handles predefined questions and returns nothing for others  */
+        /* Responsive */
         @media (max-width: 420px) {
             .chat-window {
                 width: 95vw;
@@ -1704,7 +1698,6 @@
 <body>
     <div class="chatbot-container">
         <!-- Chat Toggle Button -->
-      <!-- When clicked, this button triggers the toggleChat() function to show or hide the chatbot window -->
         <button class="chat-toggle" onclick="toggleChat()">
             <svg viewBox="0 0 24 24">
                 <path d="M20,2H4A2,2 0 0,0 2,4V22L6,18H20A2,2 0 0,0 22,16V4C0,2.89 21.11,2 20,2M6,9H18V11H6V9M6,6H18V8H6V6M6,12H15V14H6V12Z"/>
@@ -1725,7 +1718,7 @@
                     I'm here to help you understand how colleges connect and exchange surplus chemicals & equipment. Ask me anything! 
                 </div>
             </div>
-         <!-- below are some pre defined questions for now to increase the engagement on website -->
+
             <div class="quick-options">
                 <div class="quick-options-title">FAQ:</div>
                 <div class="quick-option" onclick="handleQuickOption('How does ChemConnect work?')">🔄 How does it work?</div>
@@ -1736,7 +1729,6 @@
 
             <div class="chat-input-area">
                 <input type="text" class="chat-input" id="chatInput" placeholder="Type your message..." onkeypress="handleEnterKey(event)">
-              <!-- Allows user to type messages; triggers send on 'Enter' key -->
                 <button class="send-button" onclick="sendMessage()" id="sendButton">
                     <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M2,21L23,12L2,3V10L17,12L2,14V21Z"/>
@@ -1756,36 +1748,35 @@
             'hello': 'Hello! 👋 Welcome to ChemConnect. I\'m here to help you understand how our platform connects colleges for sharing surplus chemicals and equipment. What would you like to know?',
             'hi': 'Hi there! 😊 I can help you learn about ChemConnect - where colleges connect to exchange surplus lab materials. What interests you most?',
             'hey': 'Hey! 🙌 Ready to learn about how ChemConnect helps colleges share resources? Ask me anything!',
-            // these are some pre defined QnAs which we have set in the bot to answer user if these questions are asked 
+            
             // Core Platform Questions
-            'how does chemconnect work': 'ChemConnect works through a simple 4-step process:\n\n🔍 1. Browse or List - Colleges can browse available items OR list their surplus materials\n\n🤝 2. Connect - Our platform matches you with verified colleges that have what you need\n\n💬 3. Communicate - You chat directly with the other college to arrange details\n\n📦 4. Exchange - Complete the exchange at nominal costs (just operational charges)\n\nIt\'s completely free to use - we just facilitate the connection between colleges! The goal is reducing waste while helping institutions get materials they need.',
+            'how does chemconnect work': 'ChemConnect works through a simple 4-step process:\n\n🔍 **1. Browse or List** - Colleges can browse available items OR list their surplus materials\n\n🤝 **2. Connect** - Our platform matches you with verified colleges that have what you need\n\n💬 **3. Communicate** - You chat directly with the other college to arrange details\n\n📦 **4. Exchange** - Complete the exchange at nominal costs (just operational charges)\n\nIt\'s completely free to use - we just facilitate the connection between colleges! The goal is reducing waste while helping institutions get materials they need.',
             
-            'what can i find here': 'Colleges share various lab materials on ChemConnect:\n\n🧪 Chemicals - ACS reagent grade, unopened containers\n• Currently: Acetone (HBTU Kanpur), various reagents\n\n🔬 Equipment - Instruments, analyzers, lab devices\n• Currently: UV-Vis Spectrophotometer (IIT Kanpur)\n\n🥽 Glassware & Supplies - Beakers, flasks, test tubes\n• Currently: 25-piece glassware set (PSIT Kanpur)\n\n⚗ Specialized Materials - Nanotechnology, material science items\n• Currently: Research materials (IIT Kanpur)\n\nThe inventory changes as colleges add new items and complete exchanges!',
+            'what can i find here': 'Colleges share various lab materials on ChemConnect:\n\n🧪 **Chemicals** - ACS reagent grade, unopened containers\n• Currently: Acetone (HBTU Kanpur), various reagents\n\n🔬 **Equipment** - Instruments, analyzers, lab devices\n• Currently: UV-Vis Spectrophotometer (IIT Kanpur)\n\n🥽 **Glassware & Supplies** - Beakers, flasks, test tubes\n• Currently: 25-piece glassware set (PSIT Kanpur)\n\n⚗️ **Specialized Materials** - Nanotechnology, material science items\n• Currently: Research materials (IIT Kanpur)\n\nThe inventory changes as colleges add new items and complete exchanges!',
             
-            'how do i join': 'Joining ChemConnect is straightforward:\n\n📧 1. Sign Up - Use your official college email address\n\n🏫 2. College Verification - We verify your institution to ensure authenticity\n\n📋 3. Create Profile - Set up your college\'s profile with department details\n\n✅ 4. Start Connecting - Browse available items or list your surplus materials\n\nClick "Sign up today" on the homepage to get started! We only accept verified educational institutions to maintain trust and safety.',
+            'how do i join': 'Joining ChemConnect is straightforward:\n\n📧 **1. Sign Up** - Use your official college email address\n\n🏫 **2. College Verification** - We verify your institution to ensure authenticity\n\n📋 **3. Create Profile** - Set up your college\'s profile with department details\n\n✅ **4. Start Connecting** - Browse available items or list your surplus materials\n\nClick "Sign up today" on the homepage to get started! We only accept verified educational institutions to maintain trust and safety.',
             
-            'is it really free': 'Yes, ChemConnect is completely free to use! Here\'s how it works:\n\n🆓 Platform Access - No fees to join, browse, or list items\n\n💰 Operational Charges Only - Small nominal costs for some exchanges (just covers logistics)\n\n📊 No Hidden Fees - We don\'t take commissions or charge membership fees\n\n🎯 Our Goal - Connect colleges and reduce waste, not make money from exchanges\n\nThe only costs are minimal operational charges that some colleges may request to cover their handling/shipping expenses. Most exchanges happen at very low costs compared to buying new!',
+            'is it really free': 'Yes, ChemConnect is completely free to use! Here\'s how it works:\n\n🆓 **Platform Access** - No fees to join, browse, or list items\n\n💰 **Operational Charges Only** - Small nominal costs for some exchanges (just covers logistics)\n\n📊 **No Hidden Fees** - We don\'t take commissions or charge membership fees\n\n🎯 **Our Goal** - Connect colleges and reduce waste, not make money from exchanges\n\nThe only costs are minimal operational charges that some colleges may request to cover their handling/shipping expenses. Most exchanges happen at very low costs compared to buying new!',
             
             // Specific Features
-            'what are the benefits': 'ChemConnect offers amazing benefits for colleges:\n\n💰 Huge Savings - Get materials at nominal costs vs. market prices\n• Example: Save ₹50,000+ per semester like Delhi University\n\n🌱 Reduce Waste - Give surplus materials new life instead of disposal\n\n🤝 College Network - Connect with IITs, NITs, universities across India\n\n📚 Knowledge Exchange - Foster collaboration beyond just materials\n\n🔬 Quality Assured - ACS reagent grade chemicals, well-maintained equipment\n\n⚡ Quick Process - Direct communication between colleges for fast arrangements\n\nIt\'s a win-win: save money while helping other institutions and the environment!',
+            'what are the benefits': 'ChemConnect offers amazing benefits for colleges:\n\n💰 **Huge Savings** - Get materials at nominal costs vs. market prices\n• Example: Save ₹50,000+ per semester like Delhi University\n\n🌱 **Reduce Waste** - Give surplus materials new life instead of disposal\n\n🤝 **College Network** - Connect with IITs, NITs, universities across India\n\n📚 **Knowledge Exchange** - Foster collaboration beyond just materials\n\n🔬 **Quality Assured** - ACS reagent grade chemicals, well-maintained equipment\n\n⚡ **Quick Process** - Direct communication between colleges for fast arrangements\n\nIt\'s a win-win: save money while helping other institutions and the environment!',
             
-            'safety and quality': 'We take safety and quality seriously:\n\n✅ College Verification - All institutions are verified before joining\n\n🔬 Quality Standards - Items like ACS reagent grade chemicals, well-maintained equipment\n\n📋 Detailed Descriptions - All items include condition, specifications, and usage history\n\n💬 Direct Communication - Colleges communicate directly about handling and safety requirements\n\n🏫 Institutional Trust - Working with established educational institutions\n\n📊 Transparent Process - Clear information about each item and supplying college\n\nRemember: You\'re dealing directly with verified colleges, not random sellers!',
+            'safety and quality': 'We take safety and quality seriously:\n\n✅ **College Verification** - All institutions are verified before joining\n\n🔬 **Quality Standards** - Items like ACS reagent grade chemicals, well-maintained equipment\n\n📋 **Detailed Descriptions** - All items include condition, specifications, and usage history\n\n💬 **Direct Communication** - Colleges communicate directly about handling and safety requirements\n\n🏫 **Institutional Trust** - Working with established educational institutions\n\n📊 **Transparent Process** - Clear information about each item and supplying college\n\nRemember: You\'re dealing directly with verified colleges, not random sellers!',
             
             // Examples and Success Stories
-            'examples': 'Here are some current examples on ChemConnect:\n\n🧪 Acetone (ACS Reagent Grade) - Unopened container from HBTU Kanpur\n\n📊 UV-Vis Spectrophotometer - Used but well-maintained with cuvette set from IIT Kanpur\n\n🔬 Glassware Set - 25 pieces (beakers, flasks, test tubes) from PSIT Kanpur\n\n⚗ Nanotechnology Materials - Research materials for material science from IIT Kanpur\n\nSuccess stories:\n• Delhi University saved ₹50,000+ in one semester\n• IIT Bombay helped a smaller college get equipment they couldn\'t afford\n• St. Xavier\'s College built connections with larger institutions',
+            'examples': 'Here are some current examples on ChemConnect:\n\n🧪 **Acetone (ACS Reagent Grade)** - Unopened container from HBTU Kanpur\n\n📊 **UV-Vis Spectrophotometer** - Used but well-maintained with cuvette set from IIT Kanpur\n\n🔬 **Glassware Set** - 25 pieces (beakers, flasks, test tubes) from PSIT Kanpur\n\n⚗️ **Nanotechnology Materials** - Research materials for material science from IIT Kanpur\n\nSuccess stories:\n• Delhi University saved ₹50,000+ in one semester\n• IIT Bombay helped a smaller college get equipment they couldn\'t afford\n• St. Xavier\'s College built connections with larger institutions',
             
-            'colleges participating': 'ChemConnect connects various types of institutions:\n\n🏛 IITs - Indian Institutes of Technology (like IIT Kanpur, IIT Bombay)\n\n🎓 Central Universities - Like Delhi University\n\n🏫 Private Colleges - Like St. Xavier\'s College\n\n🔬 Technical Institutes - Like HBTU Kanpur, PSIT Kanpur\n\n🌟 Research Centers - Various R&D institutions\n\nAll participating colleges are verified to ensure legitimate educational institutions. This creates a trusted network for safe exchanges.',
+            'colleges participating': 'ChemConnect connects various types of institutions:\n\n🏛️ **IITs** - Indian Institutes of Technology (like IIT Kanpur, IIT Bombay)\n\n🎓 **Central Universities** - Like Delhi University\n\n🏫 **Private Colleges** - Like St. Xavier\'s College\n\n🔬 **Technical Institutes** - Like HBTU Kanpur, PSIT Kanpur\n\n🌟 **Research Centers** - Various R&D institutions\n\nAll participating colleges are verified to ensure legitimate educational institutions. This creates a trusted network for safe exchanges.',
             
             // Process Details
-            'communication process': 'The communication process is simple and direct:\n\n1️⃣ Find Items - Browse available materials or search specifically\n\n2️⃣ Express Interest - Click to connect with the supplying college\n\n3️⃣ Direct Chat - Communicate directly with the other institution\n\n4️⃣ Arrange Details - Discuss condition, pickup/delivery, any operational charges\n\n5️⃣ Complete Exchange - Finalize the arrangement between colleges\n\nNo middleman - you deal directly with the other college for transparency and trust!',
+            'communication process': 'The communication process is simple and direct:\n\n1️⃣ **Find Items** - Browse available materials or search specifically\n\n2️⃣ **Express Interest** - Click to connect with the supplying college\n\n3️⃣ **Direct Chat** - Communicate directly with the other institution\n\n4️⃣ **Arrange Details** - Discuss condition, pickup/delivery, any operational charges\n\n5️⃣ **Complete Exchange** - Finalize the arrangement between colleges\n\nNo middleman - you deal directly with the other college for transparency and trust!',
             
-            'request vs supply': 'You can both request items you need AND supply surplus items:\n\n📝 Request Items - Fill out a form describing what your college needs\n• Gets shared with colleges that might have it\n• Other colleges can reach out if they can help\n\n📦 Supply Items - List surplus materials your college has\n• Other colleges can see and request these items\n• You choose who to work with\n\n🔄 Both Ways - Most colleges do both - request some items while supplying others\n\nIt\'s a collaborative community where everyone helps everyone!',
+            'request vs supply': 'You can both request items you need AND supply surplus items:\n\n📝 **Request Items** - Fill out a form describing what your college needs\n• Gets shared with colleges that might have it\n• Other colleges can reach out if they can help\n\n📦 **Supply Items** - List surplus materials your college has\n• Other colleges can see and request these items\n• You choose who to work with\n\n🔄 **Both Ways** - Most colleges do both - request some items while supplying others\n\nIt\'s a collaborative community where everyone helps everyone!',
             
             // Contact and Support
-            'contact support': 'Need help or have questions?\n\n📧 Contact Form - Use the contact form on our homepage\n\n❓ FAQ Section - Check our FAQ for common questions\n\n💬 This Assistant - I can help with most questions about the platform\n\n🏫 College-to-College - For specific exchanges, communicate directly with the other college\n\n🔧 Technical Issues - Report any platform problems through our contact form\n\nWe\'re here to help make connections between colleges as smooth as possible!',
+            'contact support': 'Need help or have questions?\n\n📧 **Contact Form** - Use the contact form on our homepage\n\n❓ **FAQ Section** - Check our FAQ for common questions\n\n💬 **This Assistant** - I can help with most questions about the platform\n\n🏫 **College-to-College** - For specific exchanges, communicate directly with the other college\n\n🔧 **Technical Issues** - Report any platform problems through our contact form\n\nWe\'re here to help make connections between colleges as smooth as possible!',
             
             // Default responses based on context
-          // we have set these answers to maintain proper functionality of bot and answers those question which are not set or defined in it
             'default_first': 'I can help you with information about:\n\n• How ChemConnect works (our 4-step process)\n• What materials are available for exchange\n• How to join as a college\n• Costs and pricing (spoiler: it\'s mostly free!)\n• Safety and quality standards\n• Success stories from other colleges\n• The communication process\n\nWhat would you like to know more about?',
             
             'default_followup': 'Is there anything else you\'d like to know about ChemConnect? I can explain more about:\n\n• The exchange process\n• Types of materials available\n• How colleges communicate\n• Safety measures\n• Getting started\n\nJust ask away! 😊'
@@ -1801,9 +1792,6 @@
             }
             
             // Context-aware matching with multiple keywords
-            // This object maps intent categories to arrays of related keywords.
-            // When the user types a message, we check for matching keywords to determine their intent.
-            // This helps the bot respond accurately even if exact phrases aren't used.
             const keywords = {
                 'how_work': ['how', 'work', 'process', 'steps', 'operate'],
                 'what_find': ['what', 'find', 'available', 'items', 'materials', 'chemicals', 'equipment'],
@@ -1819,7 +1807,6 @@
             };
             
             // Count keyword matches
-           // this helps bot to answer those specific questions whose words match with the library stored in bot or keywords store in bot 
             const scores = {};
             Object.keys(keywords).forEach(key => {
                 scores[key] = keywords[key].filter(keyword => lowerMessage.includes(keyword)).length;
@@ -1844,7 +1831,7 @@
                 }
             }
             
-            // Greeting detection 
+            // Greeting detection
             if (['hi', 'hello', 'hey', 'hiya', 'greetings'].some(greeting => lowerMessage.includes(greeting))) {
                 return responses['hello'];
             }
@@ -1852,7 +1839,7 @@
             // Default response based on conversation length
             return conversationHistory.length < 3 ? responses['default_first'] : responses['default_followup'];
         }
-        // Toggles the visibility of the chat window
+           //Functions to handle ChatBot Working
         function toggleChat() {
             const chatWindow = document.getElementById('chatWindow');
             chatWindow.classList.toggle('active');
@@ -1861,8 +1848,7 @@
                 document.getElementById('chatInput').focus();
             }
         }
-        // Handles quick reply options (predefined buttons)
-        // Sends the selected message directly
+
         function handleQuickOption(message) {
             sendMessage(message);
         }
@@ -1873,7 +1859,7 @@
                 sendMessage();
             }
         }
-// Sends the message if Enter is pressed (without Shift for multiline)
+
         function sendMessage(predefinedMessage = null) {
             const input = document.getElementById('chatInput');
             const message = predefinedMessage || input.value.trim();
@@ -1891,7 +1877,6 @@
             showTypingIndicator();
             
             // Generate response after delay
-          // these ensures that the response is sent without delay
             setTimeout(() => {
                 hideTypingIndicator();
                 const response = getSmartResponse(message);
@@ -1899,14 +1884,11 @@
                 conversationHistory.push({type: 'bot', message: response});
             }, 1000 + Math.random() * 1000); // Variable delay for natural feel
         }
-           // Adds a message to the chat window
-           // Parameters:
-           // - message: The text content of the message
-           // - sender: Specifies the sender ('user' or 'bot'), used for styling purposes
+
         function addMessage(message, sender) {
             const chatMessages = document.getElementById('chatMessages');
             const messageDiv = document.createElement('div');
-            messageDiv.className = message ${sender};
+            messageDiv.className = `message ${sender}`;
             
             const contentDiv = document.createElement('div');
             contentDiv.className = 'message-content';
@@ -1918,7 +1900,7 @@
             // Scroll to bottom
             chatMessages.scrollTop = chatMessages.scrollHeight;
         }
-        //  Displays a "typing" indicator in the chat window for the bot
+
         function showTypingIndicator() {
             if (isTyping) return;
             isTyping = true;
@@ -1939,9 +1921,9 @@
                 <span class="small text-muted">Assistant is typing...</span>
             `;
             
-            typingDiv.appendChild(typingContent); // Add animated dots to the typing message bubble
-            chatMessages.appendChild(typingDiv); // Add the entire typing indicator to the chat messages
-            chatMessages.scrollTop = chatMessages.scrollHeight;// Auto-scroll to the bottom to keep the typing indicator in view
+            typingDiv.appendChild(typingContent);
+            chatMessages.appendChild(typingDiv);
+            chatMessages.scrollTop = chatMessages.scrollHeight;
         }
 
         function hideTypingIndicator() {
@@ -1951,8 +1933,8 @@
             }
             isTyping = false;
         }
-      
-        // Initialize Chatbot on Page Load
+
+        // Initializing the bot 
         document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => {
                 addMessage('👋 Hi! I\'m your ChemConnect assistant. I can help you understand how colleges connect to exchange surplus chemicals and equipment. What would you like to know?', 'bot');
