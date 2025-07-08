@@ -1,4 +1,5 @@
 <!-- Index aka Landing Page (Intro page for new users redirects to login page or register page)  -->
+<!-- Future homepage would also be built on similar grounds as the index page and would like have more features to be decided and functionalities -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -37,3 +38,398 @@
         }
     </style>
 </head>
+<body class="font-sans molecule-pattern">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-lg sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <div class="flask-icon bg-blue-500 text-white p-3 rounded-full">
+                            <i class="fas fa-flask text-xl"></i>
+                        </div>
+                        <span class="ml-3 text-xl font-bold text-gray-800">ChemConnect</span>
+                    </div>
+                </div>
+                <!-- We have like referenced some default webpages we are going to build and reference to in future like login.html and register.html-->
+                <div class="hidden md:flex items-center space-x-4">
+                      <!-- Sign in button for users referencing to login.html (future login page) -->
+                    <a href="login.html" class="text-gray-800 hover:text-blue-600 px-3 py-2 font-medium">Sign In</a>
+                      <!-- Get Started option for users to register referencing to register.html (future register page) -->
+                    <a href="register.html" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-all">Get Started</a> 
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-800 hover:text-blue-600">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile menu -->
+        <div id="mobile-menu" class="hidden md:hidden bg-white shadow-lg">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                   <!-- Sign in button for users referencing to login.html (future login page) -->
+                <a href="login.html" class="block px-3 py-2 text-gray-800 hover:text-blue-600">Sign In</a>
+                      <!-- Get Started option for users to register referencing to register.html (future register page) -->
+                <a href="register.html" class="block px-3 py-2 text-gray-800 hover:text-blue-600">Get Started</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="gradient-bg text-white py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-6">Academic Chemical Resource Exchange Platform</h1>
+            <p class="text-xl mb-8 max-w-3xl mx-auto">Facilitating sustainable resource sharing between educational institutions across India.</p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                 <!-- Join our network option for users to join and register and get directed to register.html (future register page) -->
+                <a href="register.html" class="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 rounded-lg font-medium text-lg transition-all">Join Our Network</a>
+                <!-- Institution login button for users to login to their account and get directed to login.html (future login page) -->
+                <a href="login.html" class="bg-transparent border-2 border-white hover:bg-white hover:text-blue-600 px-8 py-4 rounded-lg font-medium text-lg transition-all">Institution Login</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section --> <!-- Mock Stats -->
+    <section class="bg-white py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <div class="text-4xl font-bold text-blue-600 mb-2">15+</div>
+                    <div class="text-gray-600">Colleges Connected</div>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <div class="text-4xl font-bold text-green-600 mb-2">25+</div>
+                    <div class="text-gray-600">Transactions Completed</div>
+                </div>
+                <div class="bg-gray-50 p-6 rounded-lg">
+                    <div class="text-4xl font-bold text-purple-600 mb-2">₹50K+</div>
+                    <div class="text-gray-600">Saved by Colleges</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section --> <!-- Inclusion of some features to be added in future also not to scale too much currently-->
+    <section id="features" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Platform Capabilities</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Comprehensive solutions designed for academic institutions to optimize laboratory resource management.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-lg shadow-md card-hover transition-all">
+                    <div class="text-blue-500 mb-4">
+                        <i class="fas fa-vial text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Quality Assurance</h3>
+                    <p class="text-gray-600">All resources undergo rigorous verification processes. Access ACS reagent-grade chemicals and calibrated equipment from accredited academic institutions.</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-md card-hover transition-all">
+                    <div class="text-green-500 mb-4">
+                        <i class="fas fa-rupee-sign text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Cost Optimization</h3>
+                    <p class="text-gray-600">Achieve significant budget efficiencies with resources priced at 20-30% of market rates. Institutional pricing models designed to maximize value.</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-md card-hover transition-all">
+                    <div class="text-purple-500 mb-4">
+                        <i class="fas fa-university text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Institutional Network</h3>
+                    <p class="text-gray-600">Connect with premier academic institutions including IITs, NITs, and universities nationwide. Build strategic partnerships beyond resource exchange.</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-md card-hover transition-all">
+                    <div class="text-yellow-500 mb-4">
+                        <i class="fas fa-recycle text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Sustainability Focus</h3>
+                    <p class="text-gray-600">Support circular economy principles in academic research. Reduce environmental impact through systematic reuse and redistribution of laboratory assets.</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-md card-hover transition-all">
+                    <div class="text-red-500 mb-4">
+                        <i class="fas fa-clipboard-check text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Compliance Management</h3>
+                    <p class="text-gray-600">Comprehensive documentation and tracking systems ensure regulatory compliance. All transactions maintain audit trails for institutional accountability.</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-md card-hover transition-all">
+                    <div class="text-indigo-500 mb-4">
+                        <i class="fas fa-lock text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Secure Platform</h3>
+                    <p class="text-gray-600">Enterprise-grade security protocols protect institutional data and transactions. Multi-layered authentication and encrypted communications standard.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section (Process) -->
+    <section id="how-it-works" class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">How It Works</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Streamlined workflow designed for efficiency and institutional requirements.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center p-6 rounded-lg bg-gray-50 card-hover transition-all">
+                    <div class="bg-blue-100 text-blue-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 text-2xl font-bold">1</div>
+                    <h3 class="text-xl font-bold mb-3">Register & Verify</h3>
+                    <p class="text-gray-600">Complete institutional registration with academic credentials verification. Establish secure profile with authorized personnel access controls.</p>
+                </div>
+                <div class="text-center p-6 rounded-lg bg-gray-50 card-hover transition-all">
+                    <div class="bg-green-100 text-green-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 text-2xl font-bold">2</div>
+                    <h3 class="text-xl font-bold mb-3">Discover Resources</h3>
+                    <p class="text-gray-600">Browse comprehensive inventory database or list available surplus resources. Advanced filtering and search capabilities for precise matching.</p>
+                </div>
+                <div class="text-center p-6 rounded-lg bg-gray-50 card-hover transition-all">
+                    <div class="bg-purple-100 text-purple-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 text-2xl font-bold">3</div>
+                    <h3 class="text-xl font-bold mb-3">Connect with Institutions</h3>
+                    <p class="text-gray-600">Easily connect with different instutions regarding listed items,equipment service etc.</p>
+                </div>
+                <div class="text-center p-6 rounded-lg bg-gray-50 card-hover transition-all">
+                    <div class="bg-yellow-100 text-yellow-600 rounded-full w-16 h-16 flex items-center justify-center mx-auto mb-4 text-2xl font-bold">4</div>
+                    <h3 class="text-xl font-bold mb-3">Direct Communication</h3>
+                    <p class="text-gray-600">Communicate directly with institutions as well as suppliers through whatsapp,mail or direct contact</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section id="benefits" class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">Institutional Benefits</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Strategic advantages for educational institutions participating in our resource exchange network.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-white p-8 rounded-lg shadow-md card-hover transition-all text-center">
+                    <div class="text-blue-500 mb-4">
+                        <i class="fas fa-chart-line text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Budget Optimization</h3>
+                    <p class="text-gray-600">Maximize laboratory budget efficiency through cost-effective resource acquisition. Generate additional revenue through surplus asset monetization.</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-md card-hover transition-all text-center">
+                    <div class="text-green-500 mb-4">
+                        <i class="fas fa-handshake text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Academic Collaboration</h3>
+                    <p class="text-gray-600">Establish meaningful partnerships with peer institutions. Foster research collaboration opportunities and knowledge exchange initiatives.</p>
+                </div>
+                <div class="bg-white p-8 rounded-lg shadow-md card-hover transition-all text-center">
+                    <div class="text-purple-500 mb-4">
+                        <i class="fas fa-leaf text-3xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Environmental Responsibility</h3>
+                    <p class="text-gray-600">Demonstrate institutional commitment to sustainability. Contribute to waste reduction and environmental stewardship in academic research.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->  <!-- Sample testimonials not to scale for features or anything else -->
+    <section class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-800 mb-4">What Colleges Are Saying</h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">Hear from institutions that have benefited from our platform.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="bg-gray-50 p-8 rounded-lg shadow-md card-hover transition-all">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 mr-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6">"We saved over ₹50,000 last semester by acquiring surplus chemicals through ChemConnect instead of buying new. The quality was excellent and the process was seamless."</p>
+                    <div class="flex items-center">
+                        <div class="bg-blue-100 text-blue-600 rounded-full w-12 h-12 flex items-center justify-center mr-4">
+                            <span class="font-bold">AK</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Dr. Anil Kumar</h4>
+                            <p class="text-gray-500 text-sm">Head of Chemistry, Delhi University</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-8 rounded-lg shadow-md card-hover transition-all">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 mr-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6">"The platform facilitated the redistribution of our decommissioned equipment to institutions that could benefit from these resources. An excellent example of sustainable academic practices."</p>
+                    <div class="flex items-center">
+                        <div class="bg-green-100 text-green-600 rounded-full w-12 h-12 flex items-center justify-center mr-4">
+                            <span class="font-bold">SP</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Prof. Sunita Patel</h4>
+                            <p class="text-gray-500 text-sm">Chemistry Department, IIT Bombay</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 p-8 rounded-lg shadow-md card-hover transition-all">
+                    <div class="flex items-center mb-4">
+                        <div class="text-yellow-400 mr-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6">"As a small private college, this platform has been invaluable for getting quality equipment at affordable prices. We've also made great connections with larger institutions."</p>
+                    <div class="flex items-center">
+                        <div class="bg-purple-100 text-purple-600 rounded-full w-12 h-12 flex items-center justify-center mr-4">
+                            <span class="font-bold">RM</span>
+                        </div>
+                        <div>
+                            <h4 class="font-bold">Dr. Ramesh Mehta</h4>
+                            <p class="text-gray-500 text-sm">Principal, St. Xavier's College</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action -->
+    <section class="py-20 gradient-bg text-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold mb-6">Ready to Join Our Academic Network?</h2>
+            <p class="text-xl mb-8 max-w-3xl mx-auto">Connect with leading educational institutions and optimize your laboratory resource management through our proven platform.</p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-4 sm:space-y-0 sm:space-x-4">
+                 <!-- Register button for users to get started and get redirected to register.html (future register page) -->
+                <a href="register.html" class="bg-white text-blue-600 hover:bg-gray-100 px-8 py-4 rounded-lg font-medium text-lg transition-all">Register Your Institution</a>
+                 <!-- Login option for users to access their account and get redirected to login.html (future login page) -->
+                <a href="login.html" class="bg-transparent border-2 border-white hover:bg-white hover:text-blue-600 px-8 py-4 rounded-lg font-medium text-lg transition-all">Access Your Account</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center mb-4">
+                        <div class="flask-icon bg-blue-500 text-white p-3 rounded-full">
+                            <i class="fas fa-flask text-xl"></i>
+                        </div>
+                        <span class="ml-3 text-xl font-bold">ChemConnect</span>
+                    </div>
+                      <!-- Mock links not functional because no resources have been set up till now like instagram,facebook etc -->
+                    <p class="text-gray-400">Connecting colleges through chemistry since 2023.</p>
+                    <div class="mt-4 flex space-x-4">
+                        <a href="#" class="text-gray-400 hover:text-white transition-all">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-all">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-all">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                        <a href="#" class="text-gray-400 hover:text-white transition-all">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-white transition-all">Home</a></li>
+                        <li><a href="#features" class="text-gray-400 hover:text-white transition-all">Features</a></li>
+                        <li><a href="#how-it-works" class="text-gray-400 hover:text-white transition-all">How It Works</a></li>
+                        <li><a href="#benefits" class="text-gray-400 hover:text-white transition-all">Benefits</a></li>
+                         <!-- Future homepage which has been decided would have a search section and we have referenced that future section here -->
+                        <li><a href="homepage.html#search" class="text-gray-400 hover:text-white transition-all">Search Items</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Resources</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-all">Blog</a></li>
+                         <!-- Future homepage would also have a contact and faq section so it has been referenced here also -->
+                        <li><a href="homepage.html#contact" class="text-gray-400 hover:text-white transition-all">Contact Us</a></li>
+                        <li><a href="homepage.html#faq" class="text-gray-400 hover:text-white transition-all">FAQs</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-all">Safety Guidelines</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-all">Pricing</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-lg font-bold mb-4">Legal</h3>
+                    <ul class="space-y-2">
+                         <!-- Mock links not functional -->
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-all">Terms of Service</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-all">Privacy Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-all">Cookie Policy</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-all">GDPR Compliance</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400">© 2023 ChemConnect. All rights reserved.</p>
+                <div class="mt-4 md:mt-0">
+                      <!-- Mock links not functional -->
+                    <a href="#" class="text-gray-400 hover:text-white transition-all mr-4">Terms</a>
+                    <a href="#" class="text-gray-400 hover:text-white transition-all mr-4">Privacy</a>
+                    <!-- Referencing to contact section of future homepage to be built -->
+                    <a href="homepage.html#contact" class="text-gray-400 hover:text-white transition-all">Contact</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    targetElement.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                    
+                    // Close mobile menu if open
+                    const mobileMenu = document.getElementById('mobile-menu');
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>
