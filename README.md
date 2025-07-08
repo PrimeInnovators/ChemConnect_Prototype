@@ -17,6 +17,6 @@ We have planned to make more of a frontend based and static prototype.
 
 **Commit TimeStamp**: 14:42 p.m. **Progress** - We have like completed the code for the register page currently and have added it in the register.html file.We have implemented basic features like directing to login page , validation lines and local storage check.We are still working on the login page.
 
-**CheckPoint3 Commit TimeStamp**: 4:00 p.m. **Progress**- We have now completed the code for the login page and added it in the respective login.html file.
+**CheckPoint3 Commit TimeStamp**: 4:03 p.m. **Progress**- We have now completed the code for the login page and added it in the respective login.html file.
 We have implemented local storage check as well as demo users for our convenience in testing.Basically,The login page has somewhat same layout and is on same grounds as the register page.This would now redirect registered users after logging in to the main homepage which would be built later.There are similarities in functionality and features too with the register page as mostly the pages are static.
 
