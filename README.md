@@ -27,3 +27,61 @@ We have implemented local storage check as well as demo users for our convenienc
 **Commit TimeStamp** : 8:49 p.m. **Progress**- We have fixed some issues in the chatbot code as the toggle window was not opening on clicking the chatbot icon.We have modifed the code by checking again for more issues other than this and added it again in the homepage.html file.
 
 **Commit TimeStamp**: 11:28 p.m.  **Progress** - We have completed the setup for the supplier contact page which would contain the supplier information of the respective listed static sample items as well as dynamic items listed by the user for the time being as his/her data is stored in local storage.We will now be adding the respective code in the supplier_contact.html file after defining it and then pushing the code into it.This would be like a completion step towards our prototype  ChemConnect for now as we had planned it to be static and frontend based with somewhat functionality inclusion.We would do improvement or some changes or modifications later on if we feel that we are lagging in some aspects after mentorship too or if possible at some time tomorrow
+
+#FEATURES 
+🌐 ChemConnect – Website Features Overview
+
+1. 🔷 Home / Index Page
+Welcomes users with a brief overview of the platform, its purpose, and how it simplifies inter-institutional resource sharing in the chemical domain.
+
+
+2. 📝 Registration Portal
+A dedicated form for new colleges, institutions, and laboratories to join the ChemConnect network.
+
+
+3. 🔐 Secure Login System
+Login access for registered users to manage and view their resources, requests, and interactions.
+
+
+4. 🔄 Resource Sharing Dashboard
+A dynamic interface to share, view, or offer chemicals, equipment, and lab materials across institutions.
+
+
+5. 📦 Supply Form
+Enables institutions to upload surplus inventory—chemicals, lab instruments, or any shareable resource.
+
+
+6. 🔍 Smart Search Bar
+Easily find the specific resources or items available on the platform using powerful keyword-based filtering.
+
+
+7. 📋 Available Resource Directory
+A real-time list of all currently available items, neatly categorized by type, quantity, and location.
+
+
+8. 📞 Supplier Contact Info
+Get quick access to verified contact details of the supplying institution for direct coordination.
+
+
+9. 📝 Resource Request Form
+Users can submit a request for unavailable or out-of-stock items to notify other institutions.
+
+
+10. 📜 User Activity History
+Each user can track their past requests, supplies, interactions, and shared items.
+
+
+11. 🤖 ChemBot (ChatBot Assistant)
+AI-powered chatbot to assist users with queries, navigation help, and general platform support.
+
+
+12. ❓ Frequently Asked Questions (FAQs)
+A comprehensive section answering common queries regarding platform use, rules, and best practices.
+
+
+13. ⭐ Review & Rating System
+After completing a resource exchange, users can rate the supplying institution and leave feedback, helping maintain transparency and trust within the platform.
+
+
+14. 📬 Contact Us Page
+A simple and accessible way for users to get in touch with the ChemConnect team for queries, support, feedback, or collaboration opportunities.
