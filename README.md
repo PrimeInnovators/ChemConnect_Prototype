@@ -34,53 +34,53 @@ We have implemented local storage check as well as demo users for our convenienc
 🌐 ChemConnect (Prototype) – Website Features Overview 
 Below are listed almost all the main features of the prototype ChemConnect Website 
 
-1.  Home / Index Page
+1.  Home / Index Page -
 Welcomes users with a brief overview of the platform, its purpose, and how it simplifies inter-institutional resource sharing in the chemical domain.
 
 
-2. Registration Portal 
+2. Registration Portal - 
 A dedicated form for new colleges, institutions, and laboratories to join the ChemConnect network.
 
 
-3. Secure Login System
+3. Secure Login System -
 Login access for registered users to manage and view their resources, requests, and interactions.
 
 
-4. Resource Sharing Dashboard
+4. Resource Sharing Dashboard -
 A dynamic interface to share, view, or offer chemicals, equipment, and lab materials across institutions.
 
 
-5. Supply Form
+5. Supply Form - 
 Enables institutions to upload surplus inventory—chemicals, lab instruments, or any shareable resource.
 
 
-6. Smart Search Bar
+6. Smart Search Bar -
 Easily find the specific resources or items available on the platform using powerful keyword-based filtering.
 
 
-7. Available Resource Directory
+7. Available Resource Directory - 
 A real-time list of all currently available items, neatly categorized by type, quantity, and location.
 
 
-8. Supplier Contact Info
+8. Supplier Contact Info - 
 Get quick access to verified contact details of the supplying institution for direct coordination.
 
 
-9. Resource Request Form
+9. Resource Request Form - 
 Users can submit a request for unavailable or out-of-stock items to notify other institutions.
 
 
-10. User Activity History
+10. User Activity History - 
 Each user can track their past requests, supplies, interactions, and shared items.
 
 
-11. ChemBot (ChatBot Assistant)
+11. ChemBot (ChatBot Assistant) - 
 AI-powered chatbot to assist users with queries, navigation help, and general platform support.
 
 
-12. Frequently Asked Questions (FAQs)
+12. Frequently Asked Questions (FAQs) - 
 A comprehensive section answering common queries regarding platform use, rules, and best practices.
 
 
-13. Contact Us Form
+13. Contact Us Form - 
 A simple and accessible way for users to get in touch with the ChemConnect team for queries, support, feedback, or collaboration opportunities.
