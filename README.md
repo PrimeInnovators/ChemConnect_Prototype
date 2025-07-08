@@ -14,3 +14,5 @@ We have planned to make more of a frontend based and static prototype.
 **Upload TimeStamp: 13:15 p.m. PPT submitted by Team Prime Innovators in Round 1 of HackOrbit 2025 uploaded**
 
 **CheckPoint2 Commit TimeStamp** : 14:05 p.m. **Progress** - We are currently working on the code for login and register page.We are still working on the ui,layout and basic local storage functionality but we have basically defined the files register.html and login.html. We plan to implement local storage to like store the user data as well as login and session for the time being as it is a static prototype.We are also planning to like define some demo users also for presentation purposes.
+
+**Commit TimeStamp**: 14:42 p.m. **Progress** - We have like completed the code for the register page currently and have added it in the register.html file.We have implemented basic features like directing to login page , validation lines and local storage check.We are still working on the login page.
