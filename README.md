@@ -10,3 +10,5 @@ This would also contain time stamps and commit timestamps along with our progres
 We have planned to make more of a frontend based and static prototype. 
 
 **CheckPoint1 Commit TimeStamp** : 13:05 p.m.  **Progress** - We have like now completed the index page for the prototype and added all the code in the respected index.html page as per what features and things we decided.
+
+**Upload TimeStamp: 13:15 p.m. PPT submitted by Team Prime Innovators in Round 1 of HackOrbit 2025 uploaded**
