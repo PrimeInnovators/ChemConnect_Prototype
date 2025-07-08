@@ -1,1 +1,328 @@
+<!-- Register page aka the page which user would be redirected from index/landing page if he/she is not already registered on the platform -->
+<!-- This also redirects to login page after successful registration or if user clicks on sign in or back to login -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ChemConnect - Register Your College</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .flask-icon {
+            position: relative;
+        }
+        .flask-icon::before {
+            content: "";
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            top: -10px;
+            left: -10px;
+        }
+        .molecule-pattern {
+            background-image: radial-gradient(circle, rgba(59, 130, 246, 0.1) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        
+        /* Hide browser's default password visibility toggle */  /*We are hiding this to like insure that our password visibility toggle is clearly visible and there are not two toggle eyes */
+        input[type="password"]::-ms-reveal,
+        input[type="password"]::-ms-clear {
+            display: none;
+        }
+        
+        input[type="password"]::-webkit-credentials-auto-fill-button {
+            display: none !important;
+        }
+    </style>
+</head>
+<body class="font-sans molecule-pattern bg-gray-100 flex items-center justify-center min-h-screen py-10">
+    <div class="bg-white p-8 rounded-lg shadow-lg max-w-2xl w-full">
+        <div class="text-center mb-6">
+            <div class="flex items-center justify-center mb-4">
+                <div class="flask-icon bg-blue-500 text-white p-3 rounded-full">
+                    <i class="fas fa-flask text-xl"></i>
+                </div>
+                <span class="ml-3 text-2xl font-bold text-gray-800">ChemConnect</span>
+            </div>
+            <h2 class="text-2xl font-bold text-gray-800 mb-2">Register Your College</h2>
+            <p class="text-gray-600">Join ChemConnect to start exchanging chemicals and equipment.</p>
+        </div>
 
+        <div id="registerMessage" class="mb-4"></div>
+        <!-- Register form implementation where user would enter his/her respective details -->
+        <form id="registerForm" class="space-y-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="collegeName" class="block text-sm font-medium text-gray-700 mb-1">College Name</label>
+                    <input type="text" id="collegeName" required
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="collegeAddress" class="block text-sm font-medium text-gray-700 mb-1">College Address</label>
+                    <input type="text" id="collegeAddress" required
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="contactPerson" class="block text-sm font-medium text-gray-700 mb-1">Contact Person (Head of Dept. or Admin)</label>
+                    <input type="text" id="contactPerson" required
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="designation" class="block text-sm font-medium text-gray-700 mb-1">Designation</label>
+                    <input type="text" id="designation" required
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="collegeEmail" class="block text-sm font-medium text-gray-700 mb-1">Official College Email</label>
+                    <input type="email" id="collegeEmail" required
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+                <div>
+                    <label for="phoneNumber" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                    <input type="tel" id="phoneNumber" required
+                           class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                </div>
+            </div>
+            
+            <div>
+                <label for="universityAffiliation" class="block text-sm font-medium text-gray-700 mb-1">University Affiliation / Accreditation Body</label>
+                <input type="text" id="universityAffiliation" placeholder="e.g., UGC, AICTE, State University Name" required
+                       class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label for="password" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                    <div class="relative">
+                        <input type="password" id="password" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" onclick="togglePasswordVisibility('password')">
+                            <i class="fas fa-eye-slash text-gray-500" id="passwordIcon"></i>
+                        </span>
+                    </div>
+                </div>
+                <div>
+                    <label for="confirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                    <div class="relative">
+                        <input type="password" id="confirmPassword" required
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <span class="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer" onclick="togglePasswordVisibility('confirmPassword')">
+                            <i class="fas fa-eye-slash text-gray-500" id="confirmPasswordIcon"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            
+            <div>
+                <label for="additionalInfo" class="block text-sm font-medium text-gray-700 mb-1">Additional Information (Optional)</label>
+                <textarea id="additionalInfo" placeholder="Any other details relevant to your college's registration."
+                          class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"></textarea>
+            </div>
+            
+            <div class="flex items-start">
+                <input type="checkbox" id="agreeTerms" required
+                       class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded mt-1">
+                <label for="agreeTerms" class="ml-2 block text-sm text-gray-700">
+                    <!-- Mock links for Terms of Service and Privacy Policy (not functional)--> 
+                    I agree to the <a href="#" target="_blank" class="text-blue-600 hover:underline">Terms of Service</a> and <a href="#" target="_blank" class="text-blue-600 hover:underline">Privacy Policy</a>, and understand that my college's details will be verified.
+                </label>
+            </div>
+            <!-- Register button for user to submit his/her details after which success message is shown -->
+            <button type="submit"
+                    class="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-all">
+                Register College
+            </button>
+            <!-- Directing user to login page if he/she clicks on back to login and already has a registered account in local storage or demo users-->
+            <button type="button" onclick="goToLogin()"
+                    class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-3 px-4 rounded-lg transition-all">
+                Back to Login
+            </button>
+        </form>
+        
+        <div class="text-center mt-4 text-gray-600 text-sm">
+            <!-- User directed to login page if user already has a account by clicking on Sign in here -->
+            Already have an account? <a href="#" onclick="goToLogin()" class="text-blue-600 hover:underline">Sign in here</a>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is already logged in
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginStatus();
+        });
+        
+        function checkLoginStatus() {
+            const currentUser = localStorage.getItem('chemconnect_current_user');
+            if (currentUser) {
+                // if User is already logged in, redirect to future homepage to be built as homepage.html file 
+                window.location.href = 'homepage.html';
+            }
+        }
+         // redirecting to login page 
+        function goToLogin() {
+            window.location.href = 'login.html';
+        }
+        
+        function showMessage(text, type) {
+            const messageElement = document.getElementById('registerMessage');
+            messageElement.innerHTML = `
+                <div class="p-3 rounded-lg text-sm 
+                    ${type === 'success' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}">
+                    ${text}
+                </div>
+            `;
+            
+            // Auto-hide messages after 5 seconds
+            setTimeout(() => {
+                messageElement.innerHTML = '';
+            }, 5000);
+        }
+        
+        // Handle Registration
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+             // Getting user data from registration form 
+            const formData = {
+                collegeName: document.getElementById('collegeName').value.trim(),
+                collegeAddress: document.getElementById('collegeAddress').value.trim(),
+                contactPerson: document.getElementById('contactPerson').value.trim(),
+                designation: document.getElementById('designation').value.trim(),
+                email: document.getElementById('collegeEmail').value.trim(),
+                phoneNumber: document.getElementById('phoneNumber').value.trim(),
+                universityAffiliation: document.getElementById('universityAffiliation').value.trim(),
+                password: document.getElementById('password').value,
+                confirmPassword: document.getElementById('confirmPassword').value,
+                additionalInfo: document.getElementById('additionalInfo').value.trim()
+            };
+            
+            // Validation lines 
+            if (!document.getElementById('agreeTerms').checked) {
+                showMessage('Please agree to the Terms of Service and Privacy Policy.', 'error');
+                return;
+            }
+            
+            if (formData.password !== formData.confirmPassword) {
+                showMessage('Passwords do not match!', 'error');
+                return;
+            }
+            
+            if (formData.password.length < 8) {
+                showMessage('Password must be at least 8 characters long!', 'error');
+                return;
+            }
+            
+            // Getting existing users
+            let users = JSON.parse(localStorage.getItem('chemconnect_users') || '[]');
+            
+            // Checking if user already exists
+            if (users.find(u => u.email.toLowerCase() === formData.email.toLowerCase())) {
+                showMessage('A college with this email is already registered!', 'error');
+                return;
+            }
+            
+            // Creating new user
+            const newUser = {
+                id: Date.now(),
+                collegeName: formData.collegeName,
+                collegeAddress: formData.collegeAddress,
+                contactPerson: formData.contactPerson,
+                designation: formData.designation,
+                email: formData.email,
+                phoneNumber: formData.phoneNumber,
+                universityAffiliation: formData.universityAffiliation,
+                password: formData.password, // This is just a prototype,in real product we would  hash this password
+                additionalInfo: formData.additionalInfo,
+                verified: Math.random() > 0.3, // 70% chance of being verified for demo (Random Verification Allotment for Prototype)
+                registeredAt: new Date().toISOString()
+            };
+            
+            // Adding to users array and save to localStorage
+            users.push(newUser);
+            localStorage.setItem('chemconnect_users', JSON.stringify(users));
+            
+            showMessage('Registration successful! We have received your details and will begin the verification process. You will be notified via email once your college is verified. You can now login with your credentials.', 'success');
+            
+            // Clearing form
+            document.getElementById('registerForm').reset();
+            
+            // Redirecting to login after 4 seconds
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 4000);
+        });
+        
+        // Adding some basic form validation on input
+        document.getElementById('password').addEventListener('input', function() {
+            const password = this.value;
+            
+            if (password.length > 0 && password.length < 8) {
+                this.classList.add('border-red-500');
+                this.classList.remove('focus:ring-blue-500', 'focus:border-blue-500');
+                showMessage('Password must be at least 8 characters long!', 'error');
+            } else {
+                this.classList.remove('border-red-500');
+                this.classList.add('focus:ring-blue-500', 'focus:border-blue-500');
+                if (password.length >= 8) {
+                    document.getElementById('registerMessage').innerHTML = '';
+                }
+            }
+        });
+        
+        document.getElementById('confirmPassword').addEventListener('input', function() {
+            const password = document.getElementById('password').value;
+            const confirmPassword = this.value;
+            
+            if (confirmPassword && password !== confirmPassword) {
+                this.classList.add('border-red-500');
+                this.classList.remove('focus:ring-blue-500', 'focus:border-blue-500');
+                showMessage('Passwords do not match!', 'error');
+            } else {
+                this.classList.remove('border-red-500');
+                this.classList.add('focus:ring-blue-500', 'focus:border-blue-500');
+                if (confirmPassword && password === confirmPassword) {
+                    document.getElementById('registerMessage').innerHTML = '';
+                }
+            }
+        });
+        
+        document.getElementById('collegeEmail').addEventListener('input', function() {
+            const email = this.value.trim();
+            const users = JSON.parse(localStorage.getItem('chemconnect_users') || '[]');
+            
+            if (email && users.find(u => u.email.toLowerCase() === email.toLowerCase())) {
+                this.classList.add('border-red-500');
+                this.classList.remove('focus:ring-blue-500', 'focus:border-blue-500');
+                showMessage('This email is already registered!', 'error');
+            } else {
+                this.classList.remove('border-red-500');
+                this.classList.add('focus:ring-blue-500', 'focus:border-blue-500');
+                document.getElementById('registerMessage').innerHTML = ''; // Clear message if email is unique
+            }
+        });
+
+        function togglePasswordVisibility(inputId) {
+            const input = document.getElementById(inputId);
+            const icon = inputId === 'password' ? document.getElementById('passwordIcon') : document.getElementById('confirmPasswordIcon');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            }
+        }
+    </script>
+</body>
+</html>
