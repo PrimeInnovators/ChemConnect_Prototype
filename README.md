@@ -2,6 +2,9 @@
 This would also contain time stamps and commit timestamps along with our progress log in the 36 hour hackathon**
 
 #  TIME STAMP AND PROGRESS RECORD 
+
+**Day 1 8th July**
+
 **Commit TimeStamp** : 11:31 a.m. **Progress**- README.md file just created with basic info about what it would contain.
 
 **Commit TimeStamp** : 11:56 a.m. **Progress**- Decided to make a index or landing page for the prototype ChemConnect , created index.html and added the html head setup for the ChemConnect landing page
@@ -28,6 +31,8 @@ We have implemented local storage check as well as demo users for our convenienc
 
 **Commit TimeStamp**: 11:28 p.m.  **Progress** - We have completed the setup for the supplier contact page which would contain the supplier information of the respective listed static sample items as well as dynamic items listed by the user for the time being as his/her data is stored in local storage.We will now be adding the respective code in the supplier_contact.html file after defining it and then pushing the code into it.This would be like a completion step towards our prototype  ChemConnect for now as we had planned it to be static and frontend based with somewhat functionality inclusion.We would do improvement or some changes or modifications later on if we feel that we are lagging in some aspects after mentorship too or if possible at some time tomorrow
 
+**Day 2 9th July**
+
 **Commit TimeStamp** 12:16 a.m. **Progress** - We are finishing the work in README.md file by adding setup,features and how to run the project explanation as well as description below the Time Stamp and Progress Record 
 
 **Commit TimeStamp** 12:18 a.m. **Progress** - We added the features description and explanation of our prototype ChemConnect and updated the README.md file
@@ -43,6 +48,7 @@ Deployed: ChemConnect (Prototype)
 🌐 URL: https://chemconnectprototype.netlify.app/
 Status: Successfully deployed on Netlify
 
+**CheckPoint1 Commit TimeStamp** 2:11 p.m. **Progress** - We are working on backend today and are like changing the website from static to more dynamic functionality
 
 
 # FEATURES 
