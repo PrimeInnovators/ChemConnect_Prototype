@@ -50,6 +50,8 @@ Status: Successfully deployed on Netlify
 
 **CheckPoint1 Commit TimeStamp** 2:11 p.m. **Progress** - We are working on backend today and are like changing the website from static to more dynamic functionality
 
+**CheckPoint2 Commit TimeStamp** 4:02 p.m. **Progress** - We are now completing all the backend setup with our updated files and flow and working on the deployment process we would complete it soon 
+
 
 # FEATURES 
 🌐 ChemConnect (Prototype) – Website Features Overview 
