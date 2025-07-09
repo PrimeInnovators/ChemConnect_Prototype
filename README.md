@@ -54,6 +54,8 @@ Status: Successfully deployed on Netlify
 
 **Commit TimeStamp** 4:23 p.m.  **Progress** - We have now done changes in our static webpages for backend implementation
 
+**Commit TimeStamp** 4:58 p.m. **Progress** - We have now done the changes completely and implemented the backend with making a static folder with webpages and adding the webpages after deletion and adding the backend app.py file with requirements.txt file 
+
 # FEATURES 
 🌐 ChemConnect (Prototype) – Website Features Overview 
 Below are listed almost all the main features of the prototype ChemConnect Website 
