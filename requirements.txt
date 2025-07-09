@@ -1,3 +1,6 @@
 Flask==2.3.3
 pymongo==4.6.1
-python-dotenv==1.0.0 # Optional, for loading environment variables from .env file
+dnspython==2.4.2
+python-dotenv==1.0.1
+gunicorn==21.2.0
+flask-cors==4.0.0
