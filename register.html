@@ -155,19 +155,12 @@
     </div>
 
     <script>
-        // Check if user is already logged in
+        // Check if user is already logged in (via session, not localStorage)
         document.addEventListener('DOMContentLoaded', function() {
-            checkLoginStatus();
+            // This check will be handled by the Flask backend redirecting if session exists
+            // For now, keep it simple, the Flask route will handle the redirect if logged in.
         });
         
-        function checkLoginStatus() {
-            const currentUser = localStorage.getItem('chemconnect_current_user');
-            if (currentUser) {
-                // if User is already logged in, redirect to future homepage to be built as homepage.html file 
-                window.location.href = 'homepage.html';
-            }
-        }
-         // redirecting to login page 
         function goToLogin() {
             window.location.href = 'login.html';
         }
@@ -188,7 +181,7 @@
         }
         
         // Handle Registration
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
+        document.getElementById('registerForm').addEventListener('submit', async function(e) {
             e.preventDefault();
              // Getting user data from registration form 
             const formData = {
@@ -220,44 +213,32 @@
                 return;
             }
             
-            // Getting existing users
-            let users = JSON.parse(localStorage.getItem('chemconnect_users') || '[]');
-            
-            // Checking if user already exists
-            if (users.find(u => u.email.toLowerCase() === formData.email.toLowerCase())) {
-                showMessage('A college with this email is already registered!', 'error');
-                return;
+            try {
+                const response = await fetch('/api/register', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    showMessage(result.message, 'success');
+                    // Clearing form
+                    document.getElementById('registerForm').reset();
+                    // Redirecting to login after 4 seconds
+                    setTimeout(() => {
+                        window.location.href = 'login.html';
+                    }, 4000);
+                } else {
+                    showMessage(result.message, 'error');
+                }
+            } catch (error) {
+                console.error('Error during registration:', error);
+                showMessage('An unexpected error occurred. Please try again.', 'error');
             }
-            
-            // Creating new user
-            const newUser = {
-                id: Date.now(),
-                collegeName: formData.collegeName,
-                collegeAddress: formData.collegeAddress,
-                contactPerson: formData.contactPerson,
-                designation: formData.designation,
-                email: formData.email,
-                phoneNumber: formData.phoneNumber,
-                universityAffiliation: formData.universityAffiliation,
-                password: formData.password, // This is just a prototype,in real product we would  hash this password
-                additionalInfo: formData.additionalInfo,
-                verified: Math.random() > 0.3, // 70% chance of being verified for demo (Random Verification Allotment for Prototype)
-                registeredAt: new Date().toISOString()
-            };
-            
-            // Adding to users array and save to localStorage
-            users.push(newUser);
-            localStorage.setItem('chemconnect_users', JSON.stringify(users));
-            
-            showMessage('Registration successful! We have received your details and will begin the verification process. You will be notified via email once your college is verified. You can now login with your credentials.', 'success');
-            
-            // Clearing form
-            document.getElementById('registerForm').reset();
-            
-            // Redirecting to login after 4 seconds
-            setTimeout(() => {
-                window.location.href = 'login.html';
-            }, 4000);
         });
         
         // Adding some basic form validation on input
@@ -294,18 +275,21 @@
             }
         });
         
-        document.getElementById('collegeEmail').addEventListener('input', function() {
+        document.getElementById('collegeEmail').addEventListener('input', async function() {
             const email = this.value.trim();
-            const users = JSON.parse(localStorage.getItem('chemconnect_users') || '[]');
-            
-            if (email && users.find(u => u.email.toLowerCase() === email.toLowerCase())) {
-                this.classList.add('border-red-500');
-                this.classList.remove('focus:ring-blue-500', 'focus:border-blue-500');
-                showMessage('This email is already registered!', 'error');
-            } else {
+            if (!email) return; // Don't check if empty
+
+            try {
+                // This would ideally be a separate API endpoint to check email existence
+                // For simplicity, we'll rely on the /api/register endpoint's check
+                // when the form is submitted.
+                // If you want real-time check, you'd need a new endpoint like /api/check_email?email=...
+                // and handle the response here.
+                document.getElementById('registerMessage').innerHTML = ''; // Clear previous message
                 this.classList.remove('border-red-500');
                 this.classList.add('focus:ring-blue-500', 'focus:border-blue-500');
-                document.getElementById('registerMessage').innerHTML = ''; // Clear message if email is unique
+            } catch (error) {
+                console.error('Error checking email:', error);
             }
         });
 
