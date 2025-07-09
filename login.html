@@ -94,22 +94,11 @@
     </div>
     
     <script>
-        // User database stored in localStorage
-        let users = JSON.parse(localStorage.getItem('chemconnect_users') || '[]');
-        
         // Check if user is logged in on page load
         document.addEventListener('DOMContentLoaded', function() {
-            checkLoginStatus();
-            initializeDemoUsers(); // Ensure demo users are present for testing
+            // This check will be handled by the Flask backend redirecting if session exists
+            // For now, keep it simple, the Flask route will handle the redirect if logged in.
         });
-        
-        function checkLoginStatus() {
-            const currentUser = localStorage.getItem('chemconnect_current_user');
-            if (currentUser) {
-                // User is already logged in, redirect to homepage
-                window.location.href = 'homepage.html';
-            }
-        }
         
         function goToRegister() {
             // Redirect to register page
@@ -132,7 +121,7 @@
         }
         
         // Handle Login
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
+        document.getElementById('loginForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             // Login Data Handling 
             const email = document.getElementById('loginEmail').value.trim();
@@ -143,23 +132,34 @@
                 return;
             }
             
-            // Refresh users from localStorage in case they were updated
-            users = JSON.parse(localStorage.getItem('chemconnect_users') || '[]');
-            
-            // Find user
-            const user = users.find(u => u.email.toLowerCase() === email.toLowerCase() && u.password === password);
-            
-            if (user) {
-                // Store current user session
-                localStorage.setItem('chemconnect_current_user', JSON.stringify(user));
-                showMessage('Login successful! Redirecting...', 'success');
-                
-                // Redirect to homepage after 1.5 seconds
-                setTimeout(() => {
-                    window.location.href = 'homepage.html';
-                }, 1500);
-            } else {
-                showMessage('Invalid email or password. Please try again.', 'error');
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Store current user data in localStorage (or session storage)
+                    // This is for client-side access to user details.
+                    // The actual session management is handled by Flask's server-side session.
+                    localStorage.setItem('chemconnect_current_user', JSON.stringify(result.user));
+                    showMessage(result.message + ' Redirecting...', 'success');
+                    
+                    // Redirect to homepage after 1.5 seconds
+                    setTimeout(() => {
+                        window.location.href = 'homepage.html';
+                    }, 1500);
+                } else {
+                    showMessage(result.message, 'error');
+                }
+            } catch (error) {
+                console.error('Error during login:', error);
+                showMessage('An unexpected error occurred. Please try again.', 'error');
             }
         });
         
@@ -179,60 +179,6 @@
                 eyeIcon.classList.add('fa-eye-slash');
             }
         });
-        
-        // Initialize demo users if none exist //We have added some demo users for our convenience in testing 
-        function initializeDemoUsers() {
-            if (users.length === 0) {
-                const sampleUsers = [
-                    {
-                        id: 1,
-                        collegeName: "Indian Institute of Technology Delhi",
-                        collegeAddress: "Hauz Khas, New Delhi, Delhi 110016",
-                        contactPerson: "Dr. Sarah Johnson",
-                        designation: "Head of Chemistry Department",
-                        email: "chemistry@iitd.ac.in",
-                        phoneNumber: "+91-9876543210",
-                        universityAffiliation: "IIT Delhi (Institute of National Importance)",
-                        password: "demo123",
-                        additionalInfo: "Leading research institute with state-of-the-art chemistry labs",
-                        verified: true,
-                        registeredAt: new Date().toISOString()
-                    },
-                    {
-                        id: 2,
-                        collegeName: "Delhi University - Chemistry Department",
-                        collegeAddress: "North Campus, Delhi University, Delhi 110007",
-                        contactPerson: "Prof. Michael Chen",
-                        designation: "Department Coordinator",
-                        email: "chem@du.ac.in",
-                        phoneNumber: "+91-9876543211",
-                        universityAffiliation: "University of Delhi",
-                        password: "demo456",
-                        additionalInfo: "One of India's premier universities with excellent chemistry facilities",
-                        verified: false,
-                        registeredAt: new Date().toISOString()
-                    },
-                    {
-                        id: 3,
-                        collegeName: "Jamia Millia Islamia",
-                        collegeAddress: "Jamia Nagar, New Delhi, Delhi 110025",
-                        contactPerson: "Dr. Priya Sharma",
-                        designation: "Assistant Professor",
-                        email: "chem@jmi.ac.in",
-                        phoneNumber: "+91-9876543212",
-                        universityAffiliation: "Jamia Millia Islamia (Central University)",
-                        password: "demo789",
-                        additionalInfo: "Central university with modern chemistry laboratories",
-                        verified: true,
-                        registeredAt: new Date().toISOString()
-                    }
-                ];
-                
-                localStorage.setItem('chemconnect_users', JSON.stringify(sampleUsers));
-                users = sampleUsers;
-                console.log('Demo users initialized');
-            }
-        }
     </script>
 </body>
 </html>
