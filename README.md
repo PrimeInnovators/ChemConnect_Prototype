@@ -41,6 +41,8 @@ We have implemented local storage check as well as demo users for our convenienc
 
 **Commit TimeStamp** 12:40 a.m. **Progress** - We added the setup description and explanation of our prototype ChemConnect website and updated the README.md file
 
+**Static Prototype now not functional/disabled**
+
 **PROJECT DEPLOYMENT**
 **Crucial Commit TimeStamp** 12:47 a.m. 
 
@@ -54,7 +56,17 @@ Status: Successfully deployed on Netlify
 
 **Commit TimeStamp** 4:23 p.m.  **Progress** - We have now done changes in our static webpages for backend implementation
 
-**Commit TimeStamp** 4:58 p.m. **Progress** - We have now done the changes completely and implemented the backend with making a static folder with webpages and adding the webpages after deletion and adding the backend app.py file with requirements.txt file 
+**Commit TimeStamp** 4:58 p.m. **Progress** - We have now done the changes completely and implemented the backend with making a static folder with webpages and adding the webpages after deletion and adding the backend app.py file with requirements.txt file.
+
+**Dynamic Prototype With Backend**
+
+**PROJECT DEPLOYMENT**
+
+**CheckPoint3**
+**Crucial Commit TimeStamp** 6:02 p.m.
+Deployed: ChemConnect (Prototype)
+🌐 URL: https://chemconnectislive.onrender.com
+Status: Successfully deployed on Render
 
 # FEATURES 
 🌐 ChemConnect (Prototype) – Website Features Overview 
@@ -146,12 +158,13 @@ ChemConnect Usage Flow
 
 # Setup 
 
-The prototype website basically contains of five static webpages login,register,index,homepage,supplier_contact.html with local storage implementation
+The prototype website basically contains of five static webpages login,register,index,homepage,supplier_contact.html in static folder 
 For Form Handling and other functionality - JS has been used
 For feature making and form making - HTML has been used
 Layout  and styling of pages through HTML and HTML
-So basically HTML,CSS AND JS has been used for the entire prototype website development
-Deployment has been done through netlify 
+Backend has been made through flask and MongoDB Atlas database has been implemented 
+So basically HTML,CSS,JS,Flask and MongoDBAtlas has been used for the entire prototype website development
+Deployment has been done through Render
 
 🌐 ChemConnect Website – Page Flow (Simplified)
 1. index.html – Landing Page
