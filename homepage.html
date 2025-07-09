@@ -61,7 +61,7 @@
         let currentUser = null; // Global variable to store current user
 
         // Checking login status on page load
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', async function() {
             const userString = localStorage.getItem('chemconnect_current_user');
             if (!userString) {
                 // If no user is logged in, redirect to login page
@@ -73,16 +73,32 @@
                 if (userDisplayElement) {
                     userDisplayElement.textContent = currentUser.collegeName;
                 }
-                loadProfileData(); // Load profile data after user is confirmed
+                await loadProfileData(); // Load profile data after user is confirmed
+                await performSearch(); // Load initial search results
             }
         });
         //Logout function which removes user on clicking logout option and redirects to login page 
-        function logout() {
-            localStorage.removeItem('chemconnect_current_user');
-            window.location.href = 'login.html';
+        async function logout() {
+            try {
+                const response = await fetch('/api/logout', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+                if (response.ok) {
+                    localStorage.removeItem('chemconnect_current_user');
+                    window.location.href = 'login.html';
+                } else {
+                    alert('Logout failed. Please try again.');
+                }
+            } catch (error) {
+                console.error('Error during logout:', error);
+                alert('An error occurred during logout.');
+            }
         }
         //Loadig profile data stored in local storage
-        function loadProfileData() {
+        async function loadProfileData() {
             if (!currentUser) return; // Ensure currentUser is set
 
             // Display User Details
@@ -97,45 +113,76 @@
             document.getElementById('profileRegisteredAt').textContent = new Date(currentUser.registeredAt).toLocaleDateString();
             document.getElementById('profileAdditionalInfo').textContent = currentUser.additionalInfo || 'N/A';
 
+            // Populate Request Form with current user's details
+            document.getElementById('collegeName').value = currentUser.collegeName;
+            document.getElementById('contactPerson').value = currentUser.contactPerson;
+            document.getElementById('email').value = currentUser.email;
+            document.getElementById('phone').value = currentUser.phoneNumber;
+
+            // Populate Supply Form with current user's details
+            document.getElementById('supplyCollegeName').value = currentUser.collegeName;
+            document.getElementById('supplyContactPerson').value = currentUser.contactPerson;
+            document.getElementById('supplyEmail').value = currentUser.email;
+            document.getElementById('supplyPhone').value = currentUser.phoneNumber;
+            document.getElementById('supplyLocation').value = currentUser.collegeAddress;
+
 
             // Load My Requests
             const myRequestsContainer = document.getElementById('myRequestsContainer');
             myRequestsContainer.innerHTML = ''; // Clear previous content
-            const userRequests = JSON.parse(localStorage.getItem(`chemconnect_requests_${currentUser.id}`) || '[]');
-            
-            if (userRequests.length === 0) {
-                myRequestsContainer.innerHTML = '<p class="text-gray-600">You have not submitted any requests yet.</p>';
-            } else {
-                userRequests.forEach(req => {
-                    const requestDiv = document.createElement('div');
-                    requestDiv.className = 'bg-white p-4 rounded-lg shadow-sm border border-gray-200';
-                    requestDiv.innerHTML = `
-                        <h4 class="font-bold text-gray-800">${req.itemDetails}</h4>
-                        <p class="text-sm text-gray-600">Type: ${req.itemType.charAt(0).toUpperCase() + req.itemType.slice(1)} | Urgency: ${req.urgency.charAt(0).toUpperCase() + req.urgency.slice(1)}</p>
-                        <p class="text-sm text-gray-500">Submitted on: ${new Date(req.timestamp).toLocaleDateString()}</p>
-                    `;
-                    myRequestsContainer.appendChild(requestDiv);
-                });
+            try {
+                const response = await fetch('/api/get_my_requests');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch requests');
+                }
+                const userRequests = await response.json();
+                
+                if (userRequests.length === 0) {
+                    myRequestsContainer.innerHTML = '<p class="text-gray-600">You have not submitted any requests yet.</p>';
+                } else {
+                    userRequests.forEach(req => {
+                        const requestDiv = document.createElement('div');
+                        requestDiv.className = 'bg-white p-4 rounded-lg shadow-sm border border-gray-200';
+                        requestDiv.innerHTML = `
+                            <h4 class="font-bold text-gray-800">${req.itemDetails}</h4>
+                            <p class="text-sm text-gray-600">Type: ${req.itemType.charAt(0).toUpperCase() + req.itemType.slice(1)} | Urgency: ${req.urgency.charAt(0).toUpperCase() + req.urgency.slice(1)}</p>
+                            <p class="text-sm text-gray-500">Submitted on: ${new Date(req.timestamp).toLocaleDateString()}</p>
+                        `;
+                        myRequestsContainer.appendChild(requestDiv);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading requests:', error);
+                myRequestsContainer.innerHTML = '<p class="text-red-500">Error loading requests. Please try again.</p>';
             }
 
             // Load My Supply Listings
             const mySuppliesContainer = document.getElementById('mySuppliesContainer');
             mySuppliesContainer.innerHTML = ''; // Clear previous content
-            const userSupplies = JSON.parse(localStorage.getItem(`chemconnect_supplies_${currentUser.id}`) || '[]');
+            try {
+                const response = await fetch('/api/get_my_supplies');
+                if (!response.ok) {
+                    throw new Error('Failed to fetch supplies');
+                }
+                const userSupplies = await response.json();
 
-            if (userSupplies.length === 0) {
-                mySuppliesContainer.innerHTML = '<p class="text-gray-600">You have not listed any items for supply yet.</p>';
-            } else {
-                userSupplies.forEach(sup => {
-                    const supplyDiv = document.createElement('div');
-                    supplyDiv.className = 'bg-white p-4 rounded-lg shadow-sm border border-gray-200';
-                    supplyDiv.innerHTML = `
-                        <h4 class="font-bold text-gray-800">${sup.itemDetails}</h4>
-                        <p class="text-sm text-gray-600">Type: ${sup.itemType.charAt(0).toUpperCase() + sup.itemType.slice(1)} | Price: ${sup.price === 'FREE' ? 'FREE' : '₹' + sup.price} | Location: ${sup.location}</p>
-                        <p class="text-sm text-gray-500">Listed on: ${new Date(sup.timestamp).toLocaleDateString()}</p>
-                    `;
-                    mySuppliesContainer.appendChild(supplyDiv);
-                });
+                if (userSupplies.length === 0) {
+                    mySuppliesContainer.innerHTML = '<p class="text-gray-600">You have not listed any items for supply yet.</p>';
+                } else {
+                    userSupplies.forEach(sup => {
+                        const supplyDiv = document.createElement('div');
+                        supplyDiv.className = 'bg-white p-4 rounded-lg shadow-sm border border-gray-200';
+                        supplyDiv.innerHTML = `
+                            <h4 class="font-bold text-gray-800">${sup.itemDetails}</h4>
+                            <p class="text-sm text-gray-600">Type: ${sup.itemType.charAt(0).toUpperCase() + sup.itemType.slice(1)} | Price: ${sup.price === 'FREE' ? 'FREE' : '₹' + sup.price} | Location: ${sup.location}</p>
+                            <p class="text-sm text-gray-500">Listed on: ${new Date(sup.timestamp).toLocaleDateString()}</p>
+                        `;
+                        mySuppliesContainer.appendChild(supplyDiv);
+                    });
+                }
+            } catch (error) {
+                console.error('Error loading supplies:', error);
+                mySuppliesContainer.innerHTML = '<p class="text-red-500">Error loading supplies. Please try again.</p>';
             }
         }
     </script>
@@ -327,26 +374,26 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="collegeName" class="block text-sm font-medium text-gray-700 mb-1">College Name</label>
-                            <input type="text" id="collegeName" name="collegeName" required 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <input type="text" id="collegeName" name="collegeName" required readonly
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-100 cursor-not-allowed">
                         </div>
                         <div>
                             <label for="contactPerson" class="block text-sm font-medium text-gray-700 mb-1">Contact Person</label>
-                            <input type="text" id="contactPerson" name="contactPerson" required 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <input type="text" id="contactPerson" name="contactPerson" required readonly
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-100 cursor-not-allowed">
                         </div>
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                            <input type="email" id="email" name="email" required 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <input type="email" id="email" name="email" required readonly
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-100 cursor-not-allowed">
                         </div>
                         <div>
                             <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                            <input type="tel" id="phone" name="phone" required 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <input type="tel" id="phone" name="phone" required readonly
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-100 cursor-not-allowed">
                         </div>
                     </div>
                     
@@ -419,26 +466,26 @@
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="supplyCollegeName" class="block text-sm font-medium text-gray-700 mb-1">College Name</label>
-                            <input type="text" id="supplyCollegeName" name="collegeName" required 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <input type="text" id="supplyCollegeName" name="collegeName" required readonly
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-100 cursor-not-allowed">
                         </div>
                         <div>
                             <label for="supplyContactPerson" class="block text-sm font-medium text-gray-700 mb-1">Contact Person</label>
-                            <input type="text" id="supplyContactPerson" name="contactPerson" required 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <input type="text" id="supplyContactPerson" name="contactPerson" required readonly
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-100 cursor-not-allowed">
                         </div>
                     </div>
                     
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label for="supplyEmail" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                            <input type="email" id="supplyEmail" name="email" required 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <input type="email" id="supplyEmail" name="email" required readonly
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-100 cursor-not-allowed">
                         </div>
                         <div>
                             <label for="supplyPhone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
-                            <input type="tel" id="supplyPhone" name="phone" required 
-                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            <input type="tel" id="supplyPhone" name="phone" required readonly
+                                   class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-100 cursor-not-allowed">
                         </div>
                     </div>
                     
@@ -470,8 +517,8 @@
                     
                     <div>
                         <label for="supplyLocation" class="block text-sm font-medium text-gray-700 mb-1">Location (City)</label>
-                        <input type="text" id="supplyLocation" name="location" required 
-                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <input type="text" id="supplyLocation" name="location" required readonly
+                               class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-gray-100 cursor-not-allowed">
                     </div>
                     
                     <div class="flex items-center">
@@ -534,84 +581,7 @@
                 </div>
                 
                 <div id="searchResults" class="space-y-6">
-                    <!-- Static Sample results -->
-                    <div class="bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200" data-item-type="chemical" data-supplier="HBTU Kanpur">
-                        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-                            <div>
-                                <h3 class="text-xl font-bold text-gray-800">Sodium Hydroxide (NaOH) - 5kg</h3>
-                                <p class="text-gray-600">ACS Reagent Grade, unopened container</p>
-                            </div>
-                            <div class="mt-2 md:mt-0 text-right">
-                                <span class="text-lg font-bold text-green-600">₹1,200</span>
-                                <p class="text-sm text-gray-500">HBTU Kanpur</p>
-                            </div>
-                        </div>
-                        <div class="mt-4 flex flex-wrap gap-2">
-                            <span class="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full">Chemical</span>
-                            <span class="px-3 py-1 bg-green-100 text-green-700 text-sm rounded-full">New</span>
-                        </div>
-                           <!-- Supplier contact would be built to show static sample result supplier information and also for the items by the logged in user for the time being -->
-                        <a href="supplier_contact.html?supplier=HBTU Kanpur&item=Sodium Hydroxide (NaOH) - 5kg" class="mt-4 text-blue-600 hover:text-blue-800 font-medium">Contact Supplier</a>
-                    </div>
-                    <div class="bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200" data-item-type="equipment" data-supplier="IIT Kanpur">
-                        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-                            <div>
-                                <h3 class="text-xl font-bold text-gray-800">UV-Vis Spectrophotometer</h3>
-                                <p class="text-gray-600">Used but well-maintained, includes cuvette set</p>
-                            </div>
-                            <div class="mt-2 md:mt-0 text-right">
-                                <span class="text-lg font-bold text-green-600">₹25,000</span>
-                                <p class="text-sm text-gray-500">IIT Kanpur</p>
-                            </div>
-                        </div>
-                        <div class="mt-4 flex flex-wrap gap-2">
-                            <span class="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full">Equipment</span>
-                            <span class="px-3 py-1 bg-yellow-100 text-yellow-700 text-sm rounded-full">Used</span>
-                        </div>
-                          <!-- Supplier contact would be built to show static sample result supplier information and also for the items by the logged in user for the time being -->
-                        <a href="supplier_contact.html?supplier=IIT Kanpur&item=UV-Vis Spectrophotometer" class="mt-4 text-blue-600 hover:text-blue-800 font-medium">Contact Supplier</a>
-                    </div>
-                    <div class="bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200" data-item-type="glassware" data-supplier="PSIT Kanpur">
-                        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-                            <div>
-                                <h3 class="text-xl font-bold text-gray-800">Glassware Set</h3>
-                                <p class="text-gray-600">Various beakers, flasks, and test tubes - 25 pieces total</p>
-                            </div>
-                            <div class="mt-2 md:mt-0 text-right">
-                                <span class="text-lg font-bold text-green-600">Free</span>
-                                <p class="text-sm text-gray-500">PSIT Kanpur</p>
-                            </div>
-                        </div>
-                        <div class="mt-4 flex flex-wrap gap-2">
-                            <span class="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full">Glassware</span>
-                            <span class="px-3 py-1 bg-yellow-100 text-yellow-700 text-sm rounded-full">Used</span>
-                        </div>
-                         <!-- Supplier contact would be built to show static sample result supplier information and also for the items by the logged in user for the time being -->
-                        <a href="supplier_contact.html?supplier=PSIT Kanpur&item=Glassware Set" class="mt-4 text-blue-600 hover:text-blue-800 font-medium">Contact Supplier</a>
-                    </div>
-                    <div class="bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200" data-item-type="equipment" data-supplier="IIT Kanpur">
-                        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-                            <div>
-                                <h3 class="text-xl font-bold text-gray-800">Transmission Electron Microscope</h3>
-                                <p class="text-gray-600">Used in material science,in nanotechnology.Prices due to operational charges charged on a weekly basis</p>
-                            </div>
-                            <div class="mt-2 md:mt-0 text-right">
-                                <span class="text-lg font-bold text-green-600">₹12,000 per week</span>
-                                <p class="text-sm text-gray-500">IIT Kanpur</p>
-                            </div>
-                        </div>
-                        <div class="mt-4 flex flex-wrap gap-2">
-                            <span class="px-3 py-1 bg-red-100 text-red-700 text-sm rounded-full">Sharing</span>
-                            <span class="px-3 py-1 bg-green-100 text-green-700 text-sm rounded-full">Weekly Basis</span>
-                            <span class="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full">Equipment</span>
-                            <span class="px-3 py-1 bg-yellow-100 text-yellow-700 text-sm rounded-full">Used</span>
-                        </div>
-                        <!-- Supplier contact would be built to show static sample result supplier information and also for the items by the logged in user for the time being --> 
-                        <a href="supplier_contact.html?supplier=IIT Kanpur&item=Transmission Electron Microscope" class="mt-4 text-blue-600 hover:text-blue-800 font-medium">Contact Supplier</a>
-                    </div>
-                    <div id="dynamicItemsContainer" class="space-y-6">
-                        <!-- Dynamically added supply items will appear here (Items added by the user for the time being) -->
-                    </div>
+                    <!-- Dynamically added supply items will appear here -->
                 </div>
                 
                 <div class="mt-8 text-center">
@@ -1073,7 +1043,7 @@
         });
 
         // Request form submission handling
-        document.getElementById('requestForm').addEventListener('submit', function(e) {
+        document.getElementById('requestForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             if (!currentUser) {
@@ -1082,35 +1052,49 @@
             }
 
             const requestData = {
-                id: Date.now(), // Unique ID for the request
-                userId: currentUser.id,
-                collegeName: document.getElementById('collegeName').value,
-                contactPerson: document.getElementById('contactPerson').value,
-                email: document.getElementById('email').value,
-                phone: document.getElementById('phone').value,
                 itemType: document.getElementById('itemType').value,
                 itemDetails: document.getElementById('itemDetails').value,
                 urgency: document.getElementById('urgency').value,
-                timestamp: new Date().toISOString()
             };
 
-            let userRequests = JSON.parse(localStorage.getItem(`chemconnect_requests_${currentUser.id}`) || '[]');
-            userRequests.push(requestData);
-            localStorage.setItem(`chemconnect_requests_${currentUser.id}`, JSON.stringify(userRequests));
+            try {
+                const response = await fetch('/api/request_item', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestData)
+                });
 
-            // Show success message
-            document.getElementById('requestSuccess').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('requestSuccess').classList.add('hidden');
-            }, 5000);
-            
-            // Reset form
-            this.reset();
-            loadProfileData(); // Refresh profile data
+                const result = await response.json();
+
+                if (response.ok) {
+                    // Show success message
+                    document.getElementById('requestSuccess').classList.remove('hidden');
+                    setTimeout(() => {
+                        document.getElementById('requestSuccess').classList.add('hidden');
+                    }, 5000);
+                    
+                    // Reset form
+                    this.reset();
+                    // Re-populate readonly fields
+                    document.getElementById('collegeName').value = currentUser.collegeName;
+                    document.getElementById('contactPerson').value = currentUser.contactPerson;
+                    document.getElementById('email').value = currentUser.email;
+                    document.getElementById('phone').value = currentUser.phoneNumber;
+
+                    loadProfileData(); // Refresh profile data
+                } else {
+                    alert('Failed to submit request: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error submitting request:', error);
+                alert('An unexpected error occurred. Please try again.');
+            }
         });
 
         // Supply form submission handling
-        document.getElementById('supplyForm').addEventListener('submit', function(e) {
+        document.getElementById('supplyForm').addEventListener('submit', async function(e) {
             e.preventDefault();
             
             if (!currentUser) {
@@ -1119,127 +1103,153 @@
             }
 
             const supplyData = {
-                id: Date.now(), // Unique ID for the supply item
-                userId: currentUser.id,
-                collegeName: document.getElementById('supplyCollegeName').value,
-                contactPerson: document.getElementById('supplyContactPerson').value,
-                email: document.getElementById('supplyEmail').value,
-                phone: document.getElementById('supplyPhone').value,
                 itemType: document.getElementById('supplyItemType').value,
                 itemDetails: document.getElementById('supplyItemDetails').value,
                 price: document.getElementById('supplyPrice').value || "FREE",
                 location: document.getElementById('supplyLocation').value,
-                timestamp: new Date().toISOString()
             };
 
-            // Store supplier contact info
-            let storedSuppliers = JSON.parse(localStorage.getItem('chemconnect_suppliers') || '{}');
-            storedSuppliers[supplyData.collegeName] = {
-                name: supplyData.collegeName,
-                contactPerson: supplyData.contactPerson,
-                email: supplyData.email,
-                phone: supplyData.phone,
-                address: supplyData.location
-            };
-            localStorage.setItem('chemconnect_suppliers', JSON.stringify(storedSuppliers));
+            try {
+                const response = await fetch('/api/supply_item', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(supplyData)
+                });
 
-            let userSupplies = JSON.parse(localStorage.getItem(`chemconnect_supplies_${currentUser.id}`) || '[]');
-            userSupplies.push(supplyData);
-            localStorage.setItem(`chemconnect_supplies_${currentUser.id}`, JSON.stringify(userSupplies));
+                const result = await response.json();
 
-            // Also add to the general search results (dynamicItemsContainer)
-            // This part is already handled by the existing code, just ensure it uses the new supplyData
-            const newItem = document.createElement('div');
-            newItem.className = 'bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200 mt-6';
-            newItem.setAttribute('data-item-type', supplyData.itemType); // Add data attribute for filtering
-            newItem.setAttribute('data-supplier', supplyData.collegeName); // Add data attribute for supplier
-            newItem.innerHTML = `
-                <div class="flex flex-col md:flex-row md:items-center md:justify-between">
-                    <div>
-                        <h3 class="text-xl font-bold text-gray-800">${supplyData.itemDetails}</h3>
-                        <p class="text-gray-600">${supplyData.itemType.charAt(0).toUpperCase() + supplyData.itemType.slice(1)} in ${supplyData.location}</p>
-                    </div>
-                    <div class="mt-2 md:mt-0 text-right">
-                        <span class="text-lg font-bold ${supplyData.price === 'FREE' ? 'text-green-600' : 'text-green-600'}">${supplyData.price === 'FREE' ? 'FREE' : '₹'+supplyData.price}</span>
-                        <p class="text-sm text-gray-500">${supplyData.collegeName}</p>
-                    </div>
-                </div>
-                <div class="mt-4 flex flex-wrap gap-2">
-                    <span class="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full">${supplyData.itemType.charAt(0).toUpperCase() + supplyData.itemType.slice(1)}</span>
-                    <span class="px-3 py-1 bg-green-100 text-green-700 text-sm rounded-full">Available</span>
-                </div>
-                <a href="supplier_contact.html?supplier=${encodeURIComponent(supplyData.collegeName)}&item=${encodeURIComponent(supplyData.itemDetails)}" class="mt-4 text-blue-600 hover:text-blue-800 font-medium">Contact Supplier</a>
-            `;
+                if (response.ok) {
+                    // Show success message
+                    document.getElementById('supplySuccess').classList.remove('hidden');
+                    setTimeout(() => {
+                        document.getElementById('supplySuccess').classList.add('hidden');
+                    }, 5000);
+                    
+                    // Reset form
+                    this.reset();
+                    // Re-populate readonly fields
+                    document.getElementById('supplyCollegeName').value = currentUser.collegeName;
+                    document.getElementById('supplyContactPerson').value = currentUser.contactPerson;
+                    document.getElementById('supplyEmail').value = currentUser.email;
+                    document.getElementById('supplyPhone').value = currentUser.phoneNumber;
+                    document.getElementById('supplyLocation').value = currentUser.collegeAddress;
 
-            // Add to the dynamic items container
-            document.getElementById('dynamicItemsContainer').prepend(newItem);
-            
-            // Show success message
-            document.getElementById('supplySuccess').classList.remove('hidden');
-            setTimeout(() => {
-                document.getElementById('supplySuccess').classList.add('hidden');
-            }, 5000);
-            
-            // Reset form
-            this.reset();
-            performSearch(); // Re-run search to include the new item in the visible list if filters match
-            loadProfileData(); // Refresh profile data
+                    performSearch(); // Re-run search to include the new item in the visible list if filters match
+                    loadProfileData(); // Refresh profile data
+                } else {
+                    alert('Failed to list item: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error listing item:', error);
+                alert('An unexpected error occurred. Please try again.');
+            }
         });
 
-        document.getElementById('contactForm').addEventListener('submit', function(e) {
+        document.getElementById('contactForm').addEventListener('submit', async function(e) {
             e.preventDefault();
-            document.getElementById('contactSuccess').classList.remove('hidden');
-            this.reset();
-            setTimeout(() => {
-                document.getElementById('contactSuccess').classList.add('hidden');
-            }, 5000);
-            return false;
+            const contactData = {
+                name: document.getElementById('contactName').value,
+                email: document.getElementById('contactEmail').value,
+                college: document.getElementById('contactCollege').value,
+                subject: document.getElementById('contactSubject').value,
+                message: document.getElementById('contactMessage').value,
+            };
+
+            try {
+                const response = await fetch('/api/contact_us', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(contactData)
+                });
+
+                const result = await response.json();
+
+                if (response.ok) {
+                    document.getElementById('contactSuccess').classList.remove('hidden');
+                    this.reset();
+                    setTimeout(() => {
+                        document.getElementById('contactSuccess').classList.add('hidden');
+                    }, 5000);
+                } else {
+                    alert('Failed to send message: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error submitting contact form:', error);
+                alert('An unexpected error occurred. Please try again.');
+            }
         });
 
         // --- Search Functionality ---
         const searchInput = document.getElementById('searchInput');
         const searchButton = document.getElementById('searchButton');
-        const searchResultsContainer = document.getElementById('searchResults'); // This is the parent of all item divs
+        const searchResultsContainer = document.getElementById('searchResults'); 
         const filterButtons = document.querySelectorAll('.search-filter');
         const loadMoreButton = document.getElementById('loadMoreButton');
 
         // Function to perform search and filter
-        function performSearch() {
+        async function performSearch() {
             const query = searchInput.value.toLowerCase().trim();
             let selectedType = null;
 
-            // Determine the active filter type
             filterButtons.forEach(button => {
-                if (button.classList.contains('active-chemical') ||
-                    button.classList.contains('active-equipment') ||
-                    button.classList.contains('active-glassware') ||
-                    button.classList.contains('active-other')) {
-                    selectedType = button.getAttribute('data-type');
+                const type = button.getAttribute('data-type');
+                if (button.classList.contains(`active-${type}`)) {
+                    selectedType = type;
                 }
             });
 
-            // Iterate over all direct children of searchResultsContainer (static items + dynamicItemsContainer)
-            // and then over children of dynamicItemsContainer
-            const allItems = Array.from(searchResultsContainer.children).flatMap(child => {
-                if (child.id === 'dynamicItemsContainer') {
-                    return Array.from(child.children);
+            let url = `/api/get_supplies?query=${encodeURIComponent(query)}`;
+            if (selectedType) {
+                url += `&itemType=${encodeURIComponent(selectedType)}`;
+            }
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('Failed to fetch supplies');
                 }
-                return [child];
-            }).filter(item => item.nodeType === 1); // Ensure it's an element node
+                const supplies = await response.json();
+                
+                searchResultsContainer.innerHTML = ''; // Clear previous results
 
-            allItems.forEach(item => {
-                const itemText = item.textContent.toLowerCase();
-                const itemType = item.getAttribute('data-item-type');
-
-                const matchesQuery = itemText.includes(query);
-                const matchesType = selectedType ? (itemType === selectedType) : true;
-
-                if (matchesQuery && matchesType) {
-                    item.style.display = ''; // Show the item
-                } else {
-                    item.style.display = 'none'; // Hide the item
+                if (supplies.length === 0) {
+                    searchResultsContainer.innerHTML = '<p class="text-gray-600 text-center">No items found matching your criteria.</p>';
+                    return;
                 }
-            });
+
+                supplies.forEach(supply => {
+                    const newItem = document.createElement('div');
+                    newItem.className = 'bg-gray-50 p-6 rounded-lg shadow-sm border border-gray-200';
+                    newItem.setAttribute('data-item-type', supply.itemType);
+                    newItem.setAttribute('data-supplier', supply.collegeName);
+                    newItem.innerHTML = `
+                        <div class="flex flex-col md:flex-row md:items-center md:justify-between">
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800">${supply.itemDetails}</h3>
+                                <p class="text-gray-600">${supply.itemType.charAt(0).toUpperCase() + supply.itemType.slice(1)} in ${supply.location}</p>
+                            </div>
+                            <div class="mt-2 md:mt-0 text-right">
+                                <span class="text-lg font-bold ${supply.price === 'FREE' ? 'text-green-600' : 'text-green-600'}">${supply.price === 'FREE' ? 'FREE' : '₹'+supply.price}</span>
+                                <p class="text-sm text-gray-500">${supply.collegeName}</p>
+                            </div>
+                        </div>
+                        <div class="mt-4 flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-blue-100 text-blue-700 text-sm rounded-full">${supply.itemType.charAt(0).toUpperCase() + supply.itemType.slice(1)}</span>
+                            <span class="px-3 py-1 bg-green-100 text-green-700 text-sm rounded-full">Available</span>
+                        </div>
+                        <a href="supplier_contact.html?supplier=${encodeURIComponent(supply.collegeName)}&item=${encodeURIComponent(supply.itemDetails)}" class="mt-4 text-blue-600 hover:text-blue-800 font-medium">Contact Supplier</a>
+                    `;
+                    searchResultsContainer.appendChild(newItem);
+                });
+
+            } catch (error) {
+                console.error('Error fetching search results:', error);
+                searchResultsContainer.innerHTML = '<p class="text-red-500 text-center">Error loading search results. Please try again.</p>';
+            }
         }
 
         // Event Listeners for Search Bar
@@ -1249,7 +1259,7 @@
                 performSearch();
             }
             // Also perform search on every key stroke for live filtering
-            performSearch();
+            // performSearch(); // Uncomment for live search as you type
         });
 
         // Event Listeners for Filter Buttons
@@ -1323,9 +1333,6 @@
                 }
             });
         });
-
-        // Initial search to ensure all items are visible by default
-        performSearch();
 
     </script>   
 <!-- Chatbot implemented as a floating button and window -->
@@ -1764,7 +1771,7 @@
             'safety and quality': 'We take safety and quality seriously:\n\n✅ **College Verification** - All institutions are verified before joining\n\n🔬 **Quality Standards** - Items like ACS reagent grade chemicals, well-maintained equipment\n\n📋 **Detailed Descriptions** - All items include condition, specifications, and usage history\n\n💬 **Direct Communication** - Colleges communicate directly about handling and safety requirements\n\n🏫 **Institutional Trust** - Working with established educational institutions\n\n📊 **Transparent Process** - Clear information about each item and supplying college\n\nRemember: You\'re dealing directly with verified colleges, not random sellers!',
             
             // Examples and Success Stories
-            'examples': 'Here are some current examples on ChemConnect:\n\n🧪 **Acetone (ACS Reagent Grade)** - Unopened container from HBTU Kanpur\n\n📊 **UV-Vis Spectrophotometer** - Used but well-maintained with cuvette set from IIT Kanpur\n\n🔬 **Glassware Set** - 25 pieces (beakers, flasks, test tubes) from PSIT Kanpur\n\n⚗️ **Nanotechnology Materials** - Research materials for material science from IIT Kanpur\n\nSuccess stories:\n• Delhi University saved ₹50,000+ in one semester\n• IIT Bombay helped a smaller college get equipment they couldn\'t afford\n• St. Xavier\'s College built connections with larger institutions',
+            'examples': 'Here are some current examples on ChemConnect:\n\n🧪 **Acetone (ACS Reagent Grade)** - Unopened container from HBTU Kanpur\n\n📊 **UV-Vis Spectrophotometer** - Used but well-maintained with cuvette set from IIT Kanpur\n\n🔬 **Glassware Set** - 25 pieces (beakers, flasks, test tubes) from PSIT Kanpur\n\n⚗️ **Nanotechnology Materials** - Research materials for material science from IIT Kanpur\n\nThe inventory changes as colleges add new items and complete exchanges!',
             
             'colleges participating': 'ChemConnect connects various types of institutions:\n\n🏛️ **IITs** - Indian Institutes of Technology (like IIT Kanpur, IIT Bombay)\n\n🎓 **Central Universities** - Like Delhi University\n\n🏫 **Private Colleges** - Like St. Xavier\'s College\n\n🔬 **Technical Institutes** - Like HBTU Kanpur, PSIT Kanpur\n\n🌟 **Research Centers** - Various R&D institutions\n\nAll participating colleges are verified to ensure legitimate educational institutions. This creates a trusted network for safe exchanges.',
             
