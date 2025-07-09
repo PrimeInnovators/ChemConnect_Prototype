@@ -65,121 +65,101 @@
     </main>
 
     <script>
-        // Predefined supplier data (Predefined suppliers for static sample items or results listed)
-        const predefinedSuppliers = {
-            "HBTU Kanpur": {
-                name: "HBTU Kanpur",
-                contactPerson: "Dr. Alok Sharma",
-                email: "alok.sharma@hbtu.ac.in",
-                phone: "+919876512345",
-                address: "Harcourt Butler Technical University, Kanpur, Uttar Pradesh 208002"
-            },
-            "IIT Kanpur": {
-                name: "IIT Kanpur",
-                contactPerson: "Prof. Ritu Singh",
-                email: "ritu.singh@iitk.ac.in",
-                phone: "+919988776655",
-                address: "Indian Institute of Technology Kanpur, Kalyanpur, Kanpur, Uttar Pradesh 208016"
-            },
-            "PSIT Kanpur": {
-                name: "PSIT Kanpur",
-                contactPerson: "Mr. Vivek Kumar",
-                email: "vivek.kumar@psit.ac.in",
-                phone: "+919123456789",
-                address: "Pranveer Singh Institute of Technology, Bhauti, Kanpur, Uttar Pradesh 209305"
-            }
-        };
-
-        document.addEventListener('DOMContentLoaded', () => {
+        document.addEventListener('DOMContentLoaded', async () => {
             const urlParams = new URLSearchParams(window.location.search);
             const supplierName = urlParams.get('supplier');
             const item = urlParams.get('item');
-            const currentUser = JSON.parse(localStorage.getItem('chemconnect_current_user') || 'null');
-
-            let supplierInfo = null;
             
-            // First check if current user matches the supplier
-            if (currentUser && currentUser.collegeName === supplierName) {
-                supplierInfo = {
-                    name: currentUser.collegeName,
-                    contactPerson: currentUser.contactPerson,
-                    email: currentUser.email,
-                    phone: currentUser.phoneNumber,
-                    address: currentUser.collegeAddress || "Not specified"
-                };
-            } 
-            // Otherwise check predefined suppliers
-            else if (predefinedSuppliers[supplierName]) {
-                supplierInfo = predefinedSuppliers[supplierName];
-            } 
-            // Finally check stored suppliers
-            else {
-                const storedSuppliers = JSON.parse(localStorage.getItem('chemconnect_suppliers') || '{}');
-                if (storedSuppliers[supplierName]) {
-                    supplierInfo = storedSuppliers[supplierName];
-                }
-            }
-
             const container = document.getElementById('supplierInfoContainer');
-             // Supplier info is displayed 
-            if (supplierInfo) {
-                container.innerHTML = `
-                    <div class="bg-white p-8 rounded-lg">
-                        <h2 class="text-3xl font-bold text-gray-800 mb-6">${supplierInfo.name}</h2>
-                        
-                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-800 mb-2">Contact Information</h3>
-                                <div class="space-y-4">
-                                    <p class="text-gray-700">
-                                        <strong class="text-gray-900 block">Contact Person:</strong> 
-                                        ${supplierInfo.contactPerson}
-                                    </p>
-                                    <p class="text-gray-700">
-                                        <strong class="text-gray-900 block">Email:</strong> 
-                                        <a href="mailto:${supplierInfo.email}" class="text-blue-600 hover:underline">${supplierInfo.email}</a>
-                                    </p>
-                                    <p class="text-gray-700">
-                                        <strong class="text-gray-900 block">Phone:</strong> 
-                                        <a href="tel:${supplierInfo.phone}" class="text-blue-600 hover:underline">${supplierInfo.phone}</a>
-                                    </p>
-                                    <p class="text-gray-700">
-                                        <strong class="text-gray-900 block">WhatsApp:</strong> 
-                                        <a href="https://wa.me/${supplierInfo.phone.replace(/[^\d]/g, '')}" target="_blank" 
-                                           class="text-green-600 hover:underline">
-                                            <i class="fab fa-whatsapp mr-1"></i> Chat on WhatsApp
-                                        </a>
-                                    </p>
-                                </div>
-                            </div>
-                            
-                            <div>
-                                <h3 class="text-lg font-semibold text-gray-800 mb-2">Location</h3>
-                                <p class="text-gray-700 mb-6">${supplierInfo.address}</p>
-                                
-                                ${item ? `
-                                <div>
-                                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Regarding Item</h3>
-                                    <p class="text-gray-700">${item}</p>
-                                </div>
-                                ` : ''}
-                            </div>
-                        </div>
-                        
-                        <div class="mt-8 pt-6 border-t border-gray-200">
-                            <a href="homepage.html#search" class="text-blue-600 hover:text-blue-800 font-medium">
-                                <i class="fas fa-arrow-left mr-2"></i> Back to search results
-                            </a>
-                        </div>
-                    </div>
-                `;
-            } else {
-                // Redirects user to search results on homepage if no supplier information is found -->
+
+            if (!supplierName) {
                 container.innerHTML = `
                     <div class="text-center py-12">
                         <i class="fas fa-exclamation-circle text-4xl text-red-500 mb-4"></i>
-                        <h3 class="text-xl font-bold text-gray-800 mb-2">Supplier Not Found</h3>
-                        <p class="text-gray-600 mb-4">We couldn't find information for ${supplierName}.</p>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Invalid Request</h3>
+                        <p class="text-gray-600 mb-4">No supplier specified.</p>
+                        <a href="homepage.html#search" class="text-blue-600 hover:text-blue-800 font-medium">
+                            Return to search results
+                        </a>
+                    </div>
+                `;
+                return;
+            }
+
+            try {
+                const response = await fetch(`/api/get_supplier_info/${encodeURIComponent(supplierName)}`);
+                const supplierInfo = await response.json();
+
+                if (response.ok) {
+                    container.innerHTML = `
+                        <div class="bg-white p-8 rounded-lg">
+                            <h2 class="text-3xl font-bold text-gray-800 mb-6">${supplierInfo.name}</h2>
+                            
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Contact Information</h3>
+                                    <div class="space-y-4">
+                                        <p class="text-gray-700">
+                                            <strong class="text-gray-900 block">Contact Person:</strong> 
+                                            ${supplierInfo.contactPerson}
+                                        </p>
+                                        <p class="text-gray-700">
+                                            <strong class="text-gray-900 block">Email:</strong> 
+                                            <a href="mailto:${supplierInfo.email}" class="text-blue-600 hover:underline">${supplierInfo.email}</a>
+                                        </p>
+                                        <p class="text-gray-700">
+                                            <strong class="text-gray-900 block">Phone:</strong> 
+                                            <a href="tel:${supplierInfo.phone}" class="text-blue-600 hover:underline">${supplierInfo.phone}</a>
+                                        </p>
+                                        <p class="text-gray-700">
+                                            <strong class="text-gray-900 block">WhatsApp:</strong> 
+                                            <a href="https://wa.me/${supplierInfo.phone.replace(/[^\d]/g, '')}" target="_blank" 
+                                               class="text-green-600 hover:underline">
+                                                <i class="fab fa-whatsapp mr-1"></i> Chat on WhatsApp
+                                            </a>
+                                        </p>
+                                    </div>
+                                </div>
+                                
+                                <div>
+                                    <h3 class="text-lg font-semibold text-gray-800 mb-2">Location</h3>
+                                    <p class="text-gray-700 mb-6">${supplierInfo.address}</p>
+                                    
+                                    ${item ? `
+                                    <div>
+                                        <h3 class="text-lg font-semibold text-gray-800 mb-2">Regarding Item</h3>
+                                        <p class="text-gray-700">${item}</p>
+                                    </div>
+                                    ` : ''}
+                                </div>
+                            </div>
+                            
+                            <div class="mt-8 pt-6 border-t border-gray-200">
+                                <a href="homepage.html#search" class="text-blue-600 hover:text-blue-800 font-medium">
+                                    <i class="fas fa-arrow-left mr-2"></i> Back to search results
+                                </a>
+                            </div>
+                        </div>
+                    `;
+                } else {
+                    container.innerHTML = `
+                        <div class="text-center py-12">
+                            <i class="fas fa-exclamation-circle text-4xl text-red-500 mb-4"></i>
+                            <h3 class="text-xl font-bold text-gray-800 mb-2">Supplier Not Found</h3>
+                            <p class="text-gray-600 mb-4">We couldn't find information for ${supplierName}.</p>
+                            <a href="homepage.html#search" class="text-blue-600 hover:text-blue-800 font-medium">
+                                Return to search results
+                            </a>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error fetching supplier info:', error);
+                container.innerHTML = `
+                    <div class="text-center py-12">
+                        <i class="fas fa-exclamation-circle text-4xl text-red-500 mb-4"></i>
+                        <h3 class="text-xl font-bold text-gray-800 mb-2">Error Loading Supplier</h3>
+                        <p class="text-gray-600 mb-4">An error occurred while trying to load supplier information.</p>
                         <a href="homepage.html#search" class="text-blue-600 hover:text-blue-800 font-medium">
                             Return to search results
                         </a>
