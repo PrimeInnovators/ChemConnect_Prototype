@@ -63,10 +63,16 @@ Status: Successfully deployed on Netlify
 **PROJECT DEPLOYMENT**
 
 **CheckPoint3**
+
 **Crucial Commit TimeStamp** 6:02 p.m.
+
 Deployed: ChemConnect (Prototype)
 🌐 URL: https://chemconnectislive.onrender.com
 Status: Successfully deployed on Render
+
+**CheckPoint4** **Commit TimeStamp** 10:23 p.m. Our site is now fully functional with features we wanted to implement and is now dynamic with a backend and database and we were like reviewing the code and files again to ensure correctness and to check for errors.We almost forgot to commit at this point.
+
+ChemConnect Prototype website : https://chemconnectislive.onrender.com
 
 # FEATURES 
 🌐 ChemConnect (Prototype) – Website Features Overview 
